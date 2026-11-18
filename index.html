@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIGIA Pro · Sistema Inteligente de Gestión e Inocuidad</title>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<style>
+:root {
+  --bg: #f8fafc; --panel: #ffffff; --ink: #0f172a; --mute: #64748b;
+  --line: #e2e8f0; --acc: #059669; --on-acc: #ffffff;
+  --warn: #d97706; --crit: #dc2626; --minor: #f59e0b;
+  --f1: 'Segoe UI', system-ui, sans-serif;
+}
+[data-theme="dark"] {
+  --bg: #0f172a; --panel: #1e293b; --ink: #f1f5f9; --mute: #94a3b8;
+  --line: #334155; --acc: #10b981;
+}
+* { box-sizing: border-box; margin: 0; }
+body { font-family: var(--f1); background: var(--bg); color: var(--ink); line-height: 1.6; display: flex; min-height: 100vh; }
+button { cursor: pointer; font-family: inherit; }
+input, select, textarea { font-family: inherit; }
+
+/* Layout */
+.sidebar { width: 320px; background: var(--panel); border-right: 1px solid var(--line); padding: 20px; display: flex; flex-direction: column; gap: 16px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.main { flex: 1; padding: 30px; max-width: 1000px; margin: 0 auto; }
+
+/* Components */
+.brand { font-size: 24px; font-weight: 800; color: var(--acc); display: flex; align-items: center; gap: 10px; }
+.btn { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font-weight: 600; transition: all 0.2s; }
+.btn:hover { border-color: var(--acc); color: var(--acc); }
+.btn-primary { background: var(--acc); color: var(--on-acc); border: none; }
+.btn-primary:hover { background: #047857; color: white; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.card h3 { font-size: 16px; margin-bottom: 12px; color: var(--acc); display: flex; justify-content: space-between; align-items: center; }
+
+/* Rich Text Editor */
+.rte-toolbar { display: flex; gap: 4px; padding: 8px; background: var(--bg); border: 1px solid var(--line); border-bottom: none; border-radius: 8px 8px 0 0; flex-wrap: wrap; }
+.rte-toolbar button { width: 32px; height: 32px; border: none; background: transparent; border-radius: 4px; font-weight: bold; color: var(--ink); }
+.rte-toolbar button:hover { background: var(--line); }
+.rte-content { min-height: 120px; padding: 12px; border: 1px solid var(--line); border-radius: 0 0 8px 8px; outline: none; background: var(--panel); color: var(--ink); }
+.rte-content:focus { border-color: var(--acc); }
+
+/* Findings Blocks */
+.finding-block { border-left: 4px solid var(--mute); transition: all 0.3s; }
+.finding-block.minor { border-left-color: var(--minor); }
+.finding-block.major { border-left-color: var(--warn); }
+.finding-block.critical { border-left-color: var(--crit); }
+.finding-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.badge { padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.badge.minor { background: #fef3c7; color: #92400e; }
+.badge.major { background: #ffedd5; color: #9a3412; }
+.badge.critical { background: #fee2e2; color: #991b1b; }
+
+/* Company List */
+.company-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg); border-radius: 8px; margin-bottom: 8px; cursor: pointer; border: 1px solid transparent; }
+.company-item.active { border-color: var(--acc); background: color-mix(in srgb, var(--acc) 10%, transparent); }
+
+/* Annex */
+.annex-box { background: #f0fdf4; border: 1px dashed var(--acc); padding: 16px; border-radius: 8px; margin-top: 12px; font-size: 14px; }
+
+/* Utilities */
+.hidden { display: none !important; }
+.flex { display: flex; gap: 8px; align-items: center; }
+.flex-col { display: flex; flex-direction: column; gap: 8px; }
+.text-sm { font-size: 13px; color: var(--mute); }
+.mt-2 { margin-top: 8px; }
+.mt-4 { margin-top: 16px; }
+
+/* Print / Export Styles */
+@media print {
+  .sidebar, .no-print { display: none !important; }
+  .main { padding: 0; max-width: 100%; }
+  .card { break-inside: avoid; border: none; box-shadow: none; padding: 0; margin-bottom: 24px; }
+  body { background: white; color: black; }
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="brand">
+    <svg width="32" height="32" viewBox="0 0 64 64" fill="none"><path d="M32 4L55 12v18c0 15-10 25-23 30C19 55 9 45 9 30V12L32 4z" fill="var(--acc)"/><path d="M32 47C20 40 19 27 33 17c12 9 11 23-1 30z" fill="#064e3b"/></svg>
+    SIGIA Pro
+  </div>
+  
+  <div class="flex" style="justify-content: space-between;">
+    <select id="langSelect" class="btn btn-sm" onchange="changeLang(this.value)">
+      <option value="es">🇪🇸 Español</option>
+      <option value="en">🇺🇸 English</option>
+    </select>
+    <button class="btn btn-sm" onclick="toggleTheme()">🌓</button>
+  </div>
+
+  <div class="card" style="padding: 12px;">
+    <h3 id="lbl_companies">Empresas</h3>
+    <div id="companyList"></div>
+    <button class="btn btn-primary btn-sm mt-2" style="width: 100%" onclick="showAddCompany()">+ <span id="lbl_add_comp">Agregar Empresa</span></button>
+  </div>
+
+  <div class="card" style="padding: 12px;">
+    <h3 id="lbl_quick_add">Agregar Hallazgo Rápido</h3>
+    <div class="flex-col">
+      <button class="btn btn-sm" onclick="addFinding('maintenance')">🔧 Mantenimiento</button>
+      <button class="btn btn-sm" onclick="addFinding('hygiene')">🧼 Higiene Personal</button>
+      <button class="btn btn-sm" onclick="addFinding('pests')">🐜 Control de Plagas</button>
+      <button class="btn btn-sm" onclick="addFinding('docs')">📄 Documentación</button>
+    </div>
+  </div>
+
+  <div style="margin-top: auto;">
+    <button class="btn btn-primary" style="width: 100%; margin-bottom: 8px;" onclick="exportInteractiveHTML()">🌐 Exportar Web Interactiva</button>
+    <button class="btn" style="width: 100%;" onclick="window.print()">🖨️ Imprimir / PDF</button>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+  <div class="card">
+    <div class="flex" style="justify-content: space-between; align-items: flex-start;">
+      <div>
+        <h1 id="reportTitle" style="font-size: 28px; margin-bottom: 4px;">Informe de Consultoría SQF</h1>
+        <p class="text-sm" id="reportSubtitle">Generado automáticamente por SIGIA Pro</p>
+      </div>
+      <div class="flex-col" style="align-items: flex-end;">
+        <input type="date" id="reportDate" class="btn btn-sm">
+        <input type="text" id="reportFolio" placeholder="Folio: AUD-2024-001" class="btn btn-sm" style="text-align: right;">
+      </div>
+    </div>
+    
+    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line);">
+      <label class="text-sm" id="lbl_client">Cliente / Empresa:</label>
+      <select id="clientSelect" class="btn" style="width: 100%; margin-top: 4px; text-align: left;" onchange="loadClientData()">
+        <option value="">-- Seleccionar Empresa --</option>
+      </select>
+      <div id="clientDetails" class="mt-2 text-sm hidden" style="background: var(--bg); padding: 12px; border-radius: 8px;"></div>
+    </div>
+  </div>
+
+  <div id="findingsContainer"></div>
+
+  <div class="card no-print" style="border-style: dashed; text-align: center; padding: 30px;">
+    <p class="text-sm" style="margin-bottom: 12px;">¿Necesitas agregar algo más?</p>
+    <button class="btn" onclick="addCustomFinding()">+ Bloque en Blanco</button>
+  </div>
+
+  <!-- Firmas -->
+  <div class="card" style="margin-top: 40px; page-break-inside: avoid;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px;">
+      <div style="text-align: center; border-top: 2px solid var(--ink); padding-top: 10px;">
+        <p style="font-weight: bold;">Elaborado por:</p>
+        <p id="signName">Ing. Óscar [Apellido]</p>
+        <p class="text-sm">Consultor Líder en Inocuidad</p>
+      </div>
+      <div style="text-align: center; border-top: 2px solid var(--ink); padding-top: 10px;">
+        <p style="font-weight: bold;">Vo. Bo. Cliente:</p>
+        <p id="signClient">Nombre del Gerente</p>
+        <p class="text-sm" id="signClientRole">Gerente de Planta</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL: Add Company -->
+<dialog id="companyModal" style="padding: 24px; border-radius: 12px; border: 1px solid var(--line); max-width: 500px; width: 90%;">
+  <h3 id="lbl_new_company">Nueva Empresa</h3>
+  <div class="flex-col mt-4">
+    <input type="text" id="newCompName" placeholder="Nombre de la Empresa" class="btn" style="text-align: left;">
+    <input type="text" id="newCompManager" placeholder="Nombre del Gerente" class="btn" style="text-align: left;">
+    <input type="text" id="newCompAddress" placeholder="Dirección Completa" class="btn" style="text-align: left;">
+    <input type="text" id="newCompProducts" placeholder="Productos que elabora" class="btn" style="text-align: left;">
+    <div class="flex mt-2" style="justify-content: flex-end;">
+      <button class="btn" onclick="document.getElementById('companyModal').close()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveCompany()">Guardar</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+// ═══ ESTADO Y DATOS ═══
+const state = {
+  lang: 'es',
+  companies: [
+    { id: 1, name: 'Alimentos del Valle S.A. de C.V.', manager: 'Lic. Roberto Gómez', address: 'Av. Industria 123, Parque Industrial, México', products: 'Salsas y aderezos' },
+    { id: 2, name: 'Procesadora del Norte', manager: 'Ing. Laura Martínez', address: 'Carretera Nacional Km 45, Monterrey, NL', products: 'Cárnicos frescos y congelados' }
+  ],
+  currentClientId: null,
+  findings: []
+};
+
+const i18n = {
+  es: {
+    reportTitle: 'Informe de Consultoría SQF',
+    subtitle: 'Generado automáticamente por SIGIA Pro',
+    client: 'Cliente / Empresa:',
+    addComp: 'Agregar Empresa',
+    newComp: 'Nueva Empresa',
+    quickAdd: 'Agregar Hallazgo Rápido',
+    severity: 'Gravedad',
+    minor: 'Menor',
+    major: 'Mayor',
+    critical: 'Crítica',
+    find: 'Hallazgo / Observación',
+    rec: 'Recomendación / Acción',
+    aiAnalyze: '🤖 Análisis Visual IA Sugerido',
+    genSOP: '📄 Generar Procedimiento / Capacitación',
+    delete: 'Eliminar',
+    uploadPhoto: '📷 Subir Foto / OCR',
+    processing: 'Procesando imagen con IA...',
+    sopTitle: 'ANEXO: Procedimiento Estándar / Temario de Capacitación',
+    sopContent: '<b>Objetivo:</b> Establecer los lineamientos para la ejecución y control de la actividad.<br><b>Alcance:</b> Aplica a todo el personal operativo y de supervisión.<br><b>Desarrollo del Curso (2 días):</b><br>Día 1: Fundamentos teóricos, normativa aplicable y revisión de casos.<br>Día 2: Práctica en planta, llenado de registros y evaluación de eficacia.<br><b>Registros:</b> Lista de asistencia, evaluación teórica-práctica, evidencia fotográfica.'
+  },
+  en: {
+    reportTitle: 'SQF Consulting Report',
+    subtitle: 'Automatically generated by SIGIA Pro',
+    client: 'Client / Company:',
+    addComp: 'Add Company',
+    newComp: 'New Company',
+    quickAdd: 'Quick Add Finding',
+    severity: 'Severity',
+    minor: 'Minor',
+    major: 'Major',
+    critical: 'Critical',
+    find: 'Finding / Observation',
+    rec: 'Recommendation / Action',
+    aiAnalyze: '🤖 Suggested AI Visual Analysis',
+    genSOP: '📄 Generate SOP / Training Outline',
+    delete: 'Delete',
+    uploadPhoto: '📷 Upload Photo / OCR',
+    processing: 'Processing image with AI...',
+    sopTitle: 'ANNEX: Standard Operating Procedure / Training Outline',
+    sopContent: '<b>Objective:</b> Establish guidelines for the execution and control of the activity.<br><b>Scope:</b> Applies to all operational and supervisory staff.<br><b>Course Outline (2 days):</b><br>Day 1: Theoretical foundations, applicable regulations, and case reviews.<br>Day 2: Plant practice, record filling, and effectiveness evaluation.<br><b>Records:</b> Attendance list, theoretical-practical evaluation, photographic evidence.'
+  }
+};
+
+const findingTemplates = {
+  maintenance: {
+    es: { title: 'Cláusula 11.2.1 - Mantenimiento de Equipos', find: 'Se observó falta de un programa documentado de mantenimiento preventivo para [EQUIPO]. Existen equipos sin registro de intervención.', rec: 'Implementar un programa de mantenimiento preventivo basado en las recomendaciones del fabricante, incluyendo frecuencias, responsables y registros de ejecución.' },
+    en: { title: 'Clause 11.2.1 - Equipment Maintenance', find: 'Lack of a documented preventive maintenance program for [EQUIPMENT]. Equipment found without intervention records.', rec: 'Implement a preventive maintenance program based on manufacturer recommendations, including frequencies, responsible parties, and execution records.' }
+  },
+  hygiene: {
+    es: { title: 'Cláusula 11.3 - Higiene del Personal', find: 'Se detectó personal en área de proceso sin cofia completa o con joyería visible, incumpliendo con las BPM.', rec: 'Refrescar la capacitación en Buenas Prácticas de Manufactura (BPM) y realizar auditorías de verificación diarias por parte de supervisión.' },
+    en: { title: 'Clause 11.3 - Personal Hygiene', find: 'Personnel observed in processing area without complete hairnet or with visible jewelry, non-compliant with GMP.', rec: 'Refresh Good Manufacturing Practices (GMP) training and conduct daily verification audits by supervision.' }
+  },
+  pests: {
+    es: { title: 'Cláusula 11.2.4 - Control de Plagas', find: 'Se identificó una trampa de luz UV obstruida y sin registro de limpieza en el último mes.', rec: 'Incluir las trampas de luz en el programa maestro de limpieza y verificar el contrato con el proveedor externo para asegurar el mantenimiento mensual.' },
+    en: { title: 'Clause 11.2.4 - Pest Control', find: 'UV light trap found obstructed and without cleaning records for the last month.', rec: 'Include light traps in the master cleaning program and verify the external provider contract to ensure monthly maintenance.' }
+  },
+  docs: {
+    es: { title: 'Cláusula 2.2 - Control de Documentos', find: 'Se encontró un formato obsoleto en uso en la línea de producción. No hay evidencia de control de versiones.', rec: 'Retirar inmediatamente el formato obsoleto, capacitar al personal sobre el acceso a la versión vigente y auditar el sistema de control documental.' },
+    en: { title: 'Clause 2.2 - Document Control', find: 'Obsolete form found in use on the production line. No evidence of version control.', rec: 'Immediately withdraw the obsolete form, train staff on accessing the current version, and audit the document control system.' }
+  }
+};
+
+const aiSuggestions = {
+  maintenance: '⚠️ <b>Checklist Visual IA:</b> 1. Verificar cableado expuesto o conexiones sueltas. 2. Comprobar uso de lubricantes de grado alimenticio. 3. Validar que las guardas de seguridad estén instaladas.',
+  hygiene: '⚠️ <b>Checklist Visual IA:</b> 1. Revisar estado de uñas y manos del personal. 2. Verificar que no haya botones sueltos en los uniformes. 3. Comprobar flujo de aire en estaciones de lavado de manos.',
+  pests: '⚠️ <b>Checklist Visual IA:</b> 1. Buscar huecos >6mm en muros o puertas. 2. Verificar que las puertas exteriores tengan burletes de sellado. 3. Revisar acumulación de materia orgánica cerca de drenes.',
+  docs: '⚠️ <b>Checklist Visual IA:</b> 1. Validar que los registros estén firmados y fechados. 2. Comprobar que los instructivos estén plastificados o protegidos. 3. Verificar que el organigrama esté actualizado en el tablero.'
+};
+
+// ═══ INICIALIZACIÓN ═══
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('reportDate').valueAsDate = new Date();
+  renderCompanies();
+  updateLang();
+});
+
+// ═══ FUNCIONES DE IDIOMA Y UI ═══
+function changeLang(lang) {
+  state.lang = lang;
+  updateLang();
+  // Re-render findings to apply new language to templates if they haven't been edited
+  state.findings.forEach((f, idx) => {
+    if (!f.custom) {
+      const tpl = findingTemplates[f.type][lang];
+      f.title = tpl.title;
+      // Only reset if it's still default text
+      if (f.find.includes('[') || f.find === findingTemplates[f.type]['es'].find || f.find === findingTemplates[f.type]['en'].find) {
+         f.find = tpl.find;
+         f.rec = tpl.rec;
+      }
+    }
+  });
+  renderFindings();
+}
+
+function updateLang() {
+  const t = i18n[state.lang];
+  document.getElementById('reportTitle').textContent = t.reportTitle;
+  document.getElementById('reportSubtitle').textContent = t.subtitle;
+  document.getElementById('lbl_client').textContent = t.client;
+  document.getElementById('lbl_add_comp').textContent = t.addComp;
+  document.getElementById('lbl_new_company').textContent = t.newComp;
+  document.getElementById('lbl_quick_add').textContent = t.quickAdd;
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+}
+
+// ═══ GESTIÓN DE EMPRESAS ═══
+function renderCompanies() {
+  const list = document.getElementById('companyList');
+  const select = document.getElementById('clientSelect');
+  list.innerHTML = '';
+  select.innerHTML = '<option value="">-- Seleccionar Empresa --</option>';
+  
+  state.companies.forEach(c => {
+    // Sidebar list
+    const div = document.createElement('div');
+    div.className = `company-item ${state.currentClientId === c.id ? 'active' : ''}`;
+    div.innerHTML = `<div><b>${c.name}</b><br><span class="text-sm">${c.manager}</span></div>`;
+    div.onclick = () => selectClient(c.id);
+    list.appendChild(div);
+    
+    // Main select
+    const opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = c.name;
+    select.appendChild(opt);
+  });
+}
+
+function showAddCompany() {
+  document.getElementById('newCompName').value = '';
+  document.getElementById('newCompManager').value = '';
+  document.getElementById('newCompAddress').value = '';
+  document.getElementById('newCompProducts').value = '';
+  document.getElementById('companyModal').showModal();
+}
+
+function saveCompany() {
+  const newId = state.companies.length > 0 ? Math.max(...state.companies.map(c => c.id)) + 1 : 1;
+  state.companies.push({
+    id: newId,
+    name: document.getElementById('newCompName').value || 'Nueva Empresa',
+    manager: document.getElementById('newCompManager').value || 'Gerente',
+    address: document.getElementById('newCompAddress').value || 'Dirección',
+    products: document.getElementById('newCompProducts').value || 'Productos'
+  });
+  document.getElementById('companyModal').close();
+  renderCompanies();
+}
+
+function selectClient(id) {
+  state.currentClientId = id;
+  document.getElementById('clientSelect').value = id;
+  renderCompanies();
+  loadClientData();
+}
+
+function loadClientData() {
+  const id = parseInt(document.getElementById('clientSelect').value);
+  state.currentClientId = id;
+  renderCompanies();
+  
+  const details = document.getElementById('clientDetails');
+  if (!id) {
+    details.classList.add('hidden');
+    document.getElementById('signClient').textContent = 'Nombre del Gerente';
+    document.getElementById('signClientRole').textContent = 'Gerente de Planta';
+    return;
+  }
+  
+  const c = state.companies.find(x => x.id === id);
+  details.classList.remove('hidden');
+  details.innerHTML = `<b>Gerente:</b> ${c.manager}<br><b>Dirección:</b> ${c.address}<br><b>Productos:</b> ${c.products}`;
+  document.getElementById('signClient').textContent = c.manager;
+}
+
+// ═══ SISTEMA DE HALLAZGOS (BLOQUES INTELIGENTES) ═══
+function addFinding(type) {
+  const id = Date.now();
+  const tpl = findingTemplates[type][state.lang];
+  state.findings.push({
+    id, type, custom: false,
+    severity: 'minor',
+    title: tpl.title,
+    find: tpl.find,
+    rec: tpl.rec,
+    image: null,
+    ocrText: '',
+    annex: null
+  });
+  renderFindings();
+}
+
+function addCustomFinding() {
+  const id = Date.now();
+  state.findings.push({
+    id, type: 'custom', custom: true,
+    severity: 'minor',
+    title: state.lang === 'es' ? 'Nuevo Hallazgo' : 'New Finding',
+    find: '',
+    rec: '',
+    image: null,
+    ocrText: '',
+    annex: null
+  });
+  renderFindings();
+}
+
+function updateFinding(id, field, value) {
+  const f = state.findings.find(x => x.id === id);
+  if (f) {
+    f[field] = value;
+    if (field === 'severity') renderFindings(); // Re-render to update border color
+  }
+}
+
+function deleteFinding(id) {
+  state.findings = state.findings.filter(x => x.id !== id);
+  renderFindings();
+}
+
+function renderFindings() {
+  const container = document.getElementById('findingsContainer');
+  container.innerHTML = '';
+  const t = i18n[state.lang];
+
+  state.findings.forEach(f => {
+    const div = document.createElement('div');
+    div.className = `card finding-block ${f.severity}`;
+    
+    div.innerHTML = `
+      <div class="finding-header">
+        <input type="text" value="${f.title}" class="btn" style="font-weight:700; font-size:16px; border:none; background:transparent; width:60%;" onchange="updateFinding(${f.id}, 'title', this.value)">
+        <div class="flex">
+          <select class="btn btn-sm" onchange="updateFinding(${f.id}, 'severity', this.value)">
+            <option value="minor" ${f.severity==='minor'?'selected':''}>${t.minor}</option>
+            <option value="major" ${f.severity==='major'?'selected':''}>${t.major}</option>
+            <option value="critical" ${f.severity==='critical'?'selected':''}>${t.critical}</option>
+          </select>
+          <button class="btn btn-sm" style="color:var(--crit)" onclick="deleteFinding(${f.id})">✕ ${t.delete}</button>
+        </div>
+      </div>
+
+      <label class="text-sm"><b>${t.find}:</b></label>
+      <div class="rte-toolbar no-print">
+        <button onclick="formatDoc('bold')" title="Negrita"><b>B</b></button>
+        <button onclick="formatDoc('italic')" title="Cursiva"><i>I</i></button>
+        <button onclick="formatDoc('underline')" title="Subrayado"><u>U</u></button>
+        <button onclick="formatDoc('hiliteColor', 'yellow')" title="Resaltar Amarillo" style="background:yellow; color:black;">H</button>
+        <button onclick="formatDoc('foreColor', 'red')" title="Color Rojo" style="color:red;">A</button>
+        <button onclick="formatDoc('fontSize', '4')" title="Texto Grande" style="font-size:16px;">A+</button>
+      </div>
+      <div class="rte-content" contenteditable="true" onblur="updateFinding(${f.id}, 'find', this.innerHTML)">${f.find}</div>
+
+      <label class="text-sm mt-4"><b>${t.rec}:</b></label>
+      <div class="rte-content" contenteditable="true" onblur="updateFinding(${f.id}, 'rec', this.innerHTML)">${f.rec}</div>
+
+      <div class="flex no-print mt-4" style="flex-wrap:wrap;">
+        <label class="btn btn-sm" style="cursor:pointer;">
+          ${t.uploadPhoto}
+          <input type="file" accept="image/*" hidden onchange="handleImage(this, ${f.id})">
+        </label>
+        <button class="btn btn-sm" onclick="runAIAnalysis(${f.id})">${t.aiAnalyze}</button>
+        <button class="btn btn-sm" onclick="generateAnnex(${f.id})">${t.genSOP}</button>
+      </div>
+
+      ${f.image ? `<div class="mt-4" style="max-width:300px;"><img src="${f.image}" style="width:100%; border-radius:8px; border:1px solid var(--line);"><p class="text-sm mt-2" style="font-style:italic;">${f.ocrText || ''}</p></div>` : ''}
+      
+      ${f.annex ? `<div class="annex-box"><h4>${t.sopTitle}</h4><div contenteditable="true" onblur="updateFinding(${f.id}, 'annex', this.innerHTML)">${f.annex}</div></div>` : ''}
+    `;
+    container.appendChild(div);
+  });
+}
+
+// ═══ EDITOR DE TEXTO ENRIQUECIDO ═══
+function formatDoc(cmd, value = null) {
+  document.execCommand(cmd, false, value);
+  document.activeElement.focus();
+}
+
+// ═══ PROCESAMIENTO DE IMAGEN Y OCR ═══
+async function handleImage(input, findingId) {
+  const file = input.files[0];
+  if (!file) return;
+  
+  const f = state.findings.find(x => x.id === findingId);
+  const t = i18n[state.lang];
+  
+  // Mostrar preview inmediato
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    f.image = e.target.result;
+    renderFindings();
+  };
+  reader.readAsDataURL(file);
+
+  // Procesar OCR
+  alert(t.processing);
+  try {
+    const { data: { text } } = await Tesseract.recognize(file, state.lang === 'es' ? 'spa' : 'eng');
+    f.ocrText = text.trim() ? `(Texto detectado: ${text.trim().substring(0, 150)}...)` : '';
+    renderFindings();
+  } catch (err) {
+    console.error(err);
+    f.ocrText = '(Error al procesar la imagen)';
+    renderFindings();
+  }
+}
+
+function runAIAnalysis(findingId) {
+  const f = state.findings.find(x => x.id === findingId);
+  const suggestion = aiSuggestions[f.type] || aiSuggestions['docs'];
+  
+  // Insertar al final de la recomendación
+  const currentRec = f.rec;
+  f.rec = currentRec + `<br><br><span style="color:var(--acc); background:#f0fdf4; padding:8px; border-radius:4px; display:block; border-left:3px solid var(--acc);">${suggestion}</span>`;
+  renderFindings();
+}
+
+function generateAnnex(findingId) {
+  const f = state.findings.find(x => x.id === findingId);
+  f.annex = i18n[state.lang].sopContent;
+  renderFindings();
+}
+
+// ═══ EXPORTACIÓN WEB INTERACTIVA (La joya de la corona) ═══
+function exportInteractiveHTML() {
+  const client = state.companies.find(c => c.id === state.currentClientId);
+  const clientName = client ? client.name : 'Cliente';
+  const date = document.getElementById('reportDate').value;
+  const folio = document.getElementById('reportFolio').value;
+  
+  // Clonar el contenido principal y limpiar elementos de edición
+  const mainContent = document.querySelector('.main').cloneNode(true);
+  mainContent.querySelectorAll('.no-print').forEach(el => el.remove());
+  mainContent.querySelectorAll('[contenteditable]').forEach(el => {
+    el.removeAttribute('contenteditable');
+    el.style.border = 'none';
+    el.style.background = 'transparent';
+  });
+  mainContent.querySelectorAll('select').forEach(el => {
+    const span = document.createElement('span');
+    span.textContent = el.options[el.selectedIndex].text;
+    span.style.fontWeight = 'bold';
+    el.replaceWith(span);
+  });
+
+  const htmlContent = `<!DOCTYPE html>
+<html lang="${state.lang}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe ${folio || clientName}</title>
+<style>
+  body { font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6; color: #0f172a; max-width: 900px; margin: 0 auto; padding: 40px 20px; background: #f8fafc; }
+  .card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 30px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+  h1 { color: #059669; font-size: 28px; margin-bottom: 8px; }
+  .text-sm { font-size: 14px; color: #64748b; }
+  .finding-block { border-left: 4px solid #64748b; padding-left: 16px; margin-bottom: 24px; }
+  .finding-block.minor { border-left-color: #f59e0b; }
+  .finding-block.major { border-left-color: #d97706; }
+  .finding-block.critical { border-left-color: #dc2626; }
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+  .badge.minor { background: #fef3c7; color: #92400e; }
+  .badge.major { background: #ffedd5; color: #9a3412; }
+  .badge.critical { background: #fee2e2; color: #991b1b; }
+  .annex-box { background: #f0fdf4; border: 1px dashed #059669; padding: 20px; border-radius: 8px; margin-top: 16px; }
+  img { max-width: 100%; border-radius: 8px; margin-top: 8px; }
+  .signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 60px; }
+  .sig-line { text-align: center; border-top: 2px solid #0f172a; padding-top: 10px; margin-top: 40px; }
+  @media print { body { background: white; } .card { box-shadow: none; border: none; padding: 0; } }
+</style>
+</head>
+<body>
+  ${mainContent.innerHTML}
+  <div style="text-align: center; margin-top: 40px; color: #94a3b8; font-size: 12px;">
+    Documento generado por SIGIA Pro · Fecha de emisión: ${new Date().toLocaleDateString()}
+  </div>
+</body>
+</html>`;
+
+  const blob = new Blob([htmlContent], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Informe_${clientName.replace(/\s+/g, '_')}_${date}.html`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  
+  alert('¡Web Interactiva descargada! Envía este archivo .html al cliente. Podrá abrirlo en cualquier navegador, se verá como una página web profesional y podrá imprimirlo a PDF directamente.');
+}
+</script>
+</body>
+</html>
