@@ -1,1188 +1,922 @@
-<!DOCTYPE html>
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <style>
+                body {
+                  background-color: white; /* Ensure the iframe has a white background */
+                }
+
+                
+              </style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIGIA Pro · Óscar Ordóñez</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SIGIA Pro · Sistema de Gestión de Inocuidad</title>
 <style>
-/* ═══ VARIABLES DE TEMA ═══ */
-:root {
-  --primary: #064E3B;
-  --secondary: #065F46;
-  --accent: #D97706;
-  --bg-main: #FAFAF9;
-  --bg-section: #FFFFFF;
-  --text: #1C1917;
-  --text-light: #78716C;
-  --border: #E7E5E4;
-  --shadow: rgba(6, 78, 59, 0.1);
-}
-
-[data-theme="navy"] {
-  --primary: #0F172A;
-  --secondary: #1E293B;
-  --accent: #2563EB;
-  --bg-main: #FFFFFF;
-  --bg-section: #F8FAFC;
-  --text: #1E293B;
-  --text-light: #64748B;
-  --border: #E2E8F0;
-  --shadow: rgba(15, 23, 42, 0.1);
-}
-
-[data-theme="dark"] {
-  --primary: #10B981;
-  --secondary: #059669;
-  --accent: #F59E0B;
-  --bg-main: #0F172A;
-  --bg-section: #1E293B;
-  --text: #F1F5F9;
-  --text-light: #94A3B8;
-  --border: #334155;
-  --shadow: rgba(0, 0, 0, 0.3);
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background: var(--bg-main);
-  color: var(--text);
-  line-height: 1.6;
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-
-/* ═══ HEADER CON MENÚ HAMBURGUESA ═══ */
-.top-header {
-  position: sticky;
-  top: 0;
-  background: var(--bg-section);
-  border-bottom: 2px solid var(--border);
-  padding: 12px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 1000;
-  box-shadow: 0 2px 8px var(--shadow);
-}
-
-.brand {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--primary);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.header-actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.icon-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--bg-main);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  transition: all 0.2s;
-}
-
-.icon-btn:hover {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-}
-
-.hamburger {
-  width: 40px;
-  height: 40px;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.hamburger span {
-  width: 20px;
-  height: 2px;
-  background: var(--text);
-  transition: all 0.3s;
-}
-
-.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-.hamburger.active span:nth-child(2) { opacity: 0; }
-.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-
-/* ═══ MENÚ DESPLEGABLE ═══ */
-.dropdown-menu {
-  position: absolute;
-  top: 70px;
-  right: 20px;
-  background: var(--bg-section);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 10px 40px var(--shadow);
-  min-width: 280px;
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
-  transition: all 0.3s;
-  z-index: 999;
-}
-
-.dropdown-menu.open {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: all;
-}
-
-.menu-section {
-  margin-bottom: 16px;
-}
-
-.menu-section h3 {
-  font-size: 12px;
-  text-transform: uppercase;
-  color: var(--text-light);
-  margin-bottom: 8px;
-  font-weight: 600;
-}
-
-.menu-item {
-  padding: 10px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-}
-
-.menu-item:hover {
-  background: var(--bg-main);
-}
-
-.menu-item.active {
-  background: var(--primary);
-  color: white;
-}
-
-/* ═══ CONTROLES DE AUDIO GLOBALES ═══ */
-.audio-bar {
-  background: var(--bg-section);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 20px;
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
-  font-size: 13px;
-}
-
-.audio-bar button {
-  padding: 6px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--bg-main);
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  transition: all 0.2s;
-}
-
-.audio-bar button:hover {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
-}
-
-.audio-bar input[type="range"] {
-  width: 80px;
-}
-
-/* ═══ TABS (PESTAÑAS) ═══ */
-.tabs {
-  display: flex;
-  gap: 4px;
-  padding: 12px 20px;
-  background: var(--bg-section);
-  border-bottom: 1px solid var(--border);
-  overflow-x: auto;
-}
-
-.tab {
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  white-space: nowrap;
-  transition: all 0.2s;
-  border: 1px solid transparent;
-}
-
-.tab:hover {
-  background: var(--bg-main);
-}
-
-.tab.active {
-  background: var(--primary);
-  color: white;
-}
-
-/* ═══ CONTENIDO PRINCIPAL ═══ */
-.main-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.tab-content {
-  display: none;
-}
-
-.tab-content.active {
-  display: block;
-}
-
-/* ═══ TARJETAS ═══ */
-.card {
-  background: var(--bg-section);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px var(--shadow);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--border);
-}
-
-.card-header h2 {
-  font-size: 20px;
-  color: var(--primary);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.help-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.help-tooltip {
-  background: var(--bg-main);
-  border-left: 4px solid var(--accent);
-  padding: 12px 16px;
-  margin-bottom: 16px;
-  border-radius: 0 8px 8px 0;
-  font-size: 14px;
-  color: var(--text-light);
-  display: none;
-}
-
-.help-tooltip.show {
-  display: block;
-}
-
-/* ═══ FORMULARIOS ═══ */
-.form-group {
-  margin-bottom: 16px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 6px;
-  color: var(--text);
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--bg-main);
-  color: var(--text);
-  font-size: 14px;
-  font-family: inherit;
-}
-
-.form-group textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-@media (max-width: 768px) {
-  .form-row { grid-template-columns: 1fr; }
-}
-
-/* ═══ BOTONES ═══ */
-.btn {
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: none;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.btn-primary {
-  background: var(--primary);
-  color: white;
-}
-
-.btn-primary:hover {
-  background: var(--secondary);
-}
-
-.btn-secondary {
-  background: var(--bg-main);
-  color: var(--text);
-  border: 1px solid var(--border);
-}
-
-.btn-secondary:hover {
-  background: var(--border);
-}
-
-.btn-accent {
-  background: var(--accent);
-  color: white;
-}
-
-.btn-accent:hover {
-  opacity: 0.9;
-}
-
-/* ═══ LISTA DE EMPRESAS ═══ */
-.company-list {
-  display: grid;
-  gap: 12px;
-}
-
-.company-item {
-  padding: 16px;
-  background: var(--bg-main);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.company-item:hover {
-  border-color: var(--primary);
-  transform: translateY(-2px);
-}
-
-.company-item.active {
-  border-color: var(--primary);
-  background: var(--bg-section);
-  box-shadow: 0 4px 12px var(--shadow);
-}
-
-.company-item h3 {
-  font-size: 16px;
-  color: var(--primary);
-  margin-bottom: 4px;
-}
-
-.company-item p {
-  font-size: 13px;
-  color: var(--text-light);
-}
-
-/* ═══ SELECTOR DE ISO ═══ */
-.iso-selector {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
-}
-
-.iso-btn {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 2px solid var(--border);
-  background: var(--bg-main);
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  transition: all 0.2s;
-}
-
-.iso-btn:hover {
-  border-color: var(--primary);
-}
-
-.iso-btn.active {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-}
-
-/* ═══ ASISTENTE DE PREGUNTAS ═══ */
-.chat-container {
-  background: var(--bg-main);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  max-height: 500px;
-  overflow-y: auto;
-}
-
-.chat-message {
-  margin-bottom: 12px;
-  padding: 12px;
-  border-radius: 8px;
-}
-
-.chat-message.user {
-  background: var(--primary);
-  color: white;
-  margin-left: 40px;
-}
-
-.chat-message.assistant {
-  background: var(--bg-section);
-  border: 1px solid var(--border);
-  margin-right: 40px;
-}
-
-.chat-input-area {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.chat-input-area input {
-  flex: 1;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--bg-section);
-  color: var(--text);
-}
-
-/* ═══ INFORME ═══ */
-.report-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.report-meta {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  font-size: 13px;
-  color: var(--text-light);
-}
-
-.finding-block {
-  background: var(--bg-section);
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--primary);
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 12px;
-}
-
-.finding-block.minor { border-left-color: #F59E0B; }
-.finding-block.major { border-left-color: #D97706; }
-.finding-block.critical { border-left-color: #DC2626; }
-
-/* ═══ FOOTER ═══ */
-.footer {
-  text-align: center;
-  padding: 20px;
-  margin-top: 40px;
-  border-top: 1px solid var(--border);
-  font-size: 12px;
-  color: var(--text-light);
-}
-
-/* ═══ UTILIDADES ═══ */
-.hidden { display: none !important; }
-.flex { display: flex; gap: 8px; align-items: center; }
-.flex-col { display: flex; flex-direction: column; gap: 8px; }
-.mt-2 { margin-top: 8px; }
-.mt-4 { margin-top: 16px; }
-.text-sm { font-size: 13px; color: var(--text-light); }
-
-@media (max-width: 768px) {
-  .main-content { padding: 12px; }
-  .card { padding: 16px; }
-  .tabs { padding: 8px 12px; }
-}
+:root{--p:#064E3B;--p2:#065F46;--a:#D97706;--bg:#F7F8F7;--card:#fff;--tx:#1C1917;--tx2:#6B7280;--bd:#E5E7EB;--hl:#FEF08A;--ok:#059669;--warn:#D97706;--crit:#DC2626;--r:12px}
+[data-skin=navy]{--p:#0F172A;--p2:#1E293B;--a:#2563EB;--bg:#F8FAFC;--card:#fff;--tx:#0F172A;--tx2:#64748B;--bd:#E2E8F0}
+[data-skin=dark]{--p:#10B981;--p2:#059669;--a:#F59E0B;--bg:#0F172A;--card:#1E293B;--tx:#F1F5F9;--tx2:#94A3B8;--bd:#334155;--hl:#3f3f00}
+[data-skin=gold]{--p:#18181B;--p2:#27272A;--a:#B8860B;--bg:#FAFAF7;--card:#fff;--tx:#18181B;--tx2:#71717A;--bd:#E4E4E7}
+[data-skin=burgundy]{--p:#581C27;--p2:#7C2D3E;--a:#C9A961;--bg:#FDFBF7;--card:#fff;--tx:#2D1B1F;--tx2:#78716C;--bd:#E8E2D5}
+[data-skin=slate]{--p:#1E293B;--p2:#334155;--a:#B45309;--bg:#F8FAFC;--card:#fff;--tx:#0F172A;--tx2:#64748B;--bd:#E2E8F0}
+[data-skin=sage]{--p:#4A5D4F;--p2:#6B7F6E;--a:#C67B5C;--bg:#F5F2ED;--card:#fff;--tx:#2D3A2F;--tx2:#78847A;--bd:#DCD5C8}
+[data-skin=petrol]{--p:#134E5E;--p2:#1A6B7D;--a:#D4A012;--bg:#F7F9FA;--card:#fff;--tx:#0F2E36;--tx2:#6B8389;--bd:#D8E1E3}
+[data-skin=mono]{--p:#111827;--p2:#374151;--a:#525252;--bg:#fff;--card:#FAFAFA;--tx:#0A0A0A;--tx2:#737373;--bd:#E5E5E5}
+[data-skin=queen]{--p:#8B6F6F;--p2:#A8898A;--a:#B76E79;--bg:#FDF9F6;--card:#fff;--tx:#3D2F2F;--tx2:#9B8585;--bd:#EAD9D0}
+[data-skin=cyber]{--p:#00B8B8;--p2:#008F8F;--a:#FF00A8;--bg:#0D0221;--card:#170636;--tx:#E0FFFF;--tx2:#7FDBDB;--bd:#2A1155}
+[data-skin=forest]{--p:#2D5016;--p2:#4A7C2C;--a:#B45309;--bg:#EDF3E4;--card:#fff;--tx:#1A2E0A;--tx2:#5A7040;--bd:#C5D4A8}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font:400 16px/1.65 system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx)}
+button,select,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+h1,h2,h3{line-height:1.25}
+.hd{position:sticky;top:0;z-index:60;background:var(--card);border-bottom:1px solid var(--bd);padding:10px 14px;display:flex;gap:8px;align-items:center;justify-content:space-between}
+.brand{display:flex;gap:8px;align-items:center;font-weight:800;color:var(--p);font-size:18px}
+.hd .ic{width:38px;height:38px;border:1px solid var(--bd);background:var(--bg);border-radius:10px;display:grid;place-items:center;font-size:16px}
+.hd .ic:hover{border-color:var(--p)}
+.ham span{display:block;width:18px;height:2px;background:var(--tx);margin:3px auto;border-radius:2px}
+.menu{position:fixed;top:60px;right:10px;width:290px;max-height:80vh;overflow:auto;background:var(--card);border:1px solid var(--bd);border-radius:14px;box-shadow:0 20px 50px #0003;padding:12px;z-index:70;display:none}
+.menu.on{display:block}
+.menu h4{font-size:11px;text-transform:uppercase;color:var(--tx2);margin:10px 6px 4px}
+.mi{padding:9px 10px;border-radius:9px;font-size:14px;display:flex;gap:9px;align-items:center}
+.mi:hover{background:var(--bg)}
+.mi.on{background:var(--p);color:#fff}
+.bar{background:var(--card);border-bottom:1px solid var(--bd);padding:8px 14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:13px}
+.bar select,.bar input[type=range]{border:1px solid var(--bd);background:var(--bg);border-radius:7px;padding:4px 6px;font-size:12px}
+.bar input[type=range]{padding:0;width:90px}
+.tabs{display:flex;gap:5px;overflow:auto;padding:9px 12px;background:var(--card);border-bottom:1px solid var(--bd)}
+.tab{padding:7px 13px;border-radius:9px;font-size:13.5px;font-weight:600;white-space:nowrap;border:1px solid transparent}
+.tab.on{background:var(--p);color:#fff}
+main{max-width:1150px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:18px;margin-bottom:14px}
+.ch{display:flex;gap:10px;align-items:center;justify-content:space-between;border-bottom:2px solid var(--bd);padding-bottom:9px;margin-bottom:12px;flex-wrap:wrap}
+.ch h2{font-size:18px;color:var(--p)}
+.help{display:none;background:var(--bg);border-left:4px solid var(--a);padding:11px 13px;border-radius:0 9px 9px 0;font-size:14px;color:var(--tx2);margin-bottom:12px}
+body.help-on .help{display:block}
+.btn{padding:9px 15px;border:1px solid var(--bd);background:var(--card);border-radius:9px;font-size:13.5px;font-weight:600;display:inline-flex;gap:6px;align-items:center}
+.btn:hover{border-color:var(--p)}
+.btn.p{background:var(--p);color:#fff;border-color:var(--p)}
+.btn.a{background:var(--a);color:#fff;border-color:var(--a)}
+.btn.d{background:var(--crit);color:#fff;border-color:var(--crit)}
+.btn.s{padding:5px 10px;font-size:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+@media(max-width:760px){.g2{grid-template-columns:1fr}}
+label.f{display:grid;gap:4px;font-size:12.5px;color:var(--tx2);font-weight:600}
+label.f input,label.f select,label.f textarea,textarea.ta,input.in,select.in{width:100%;padding:9px 11px;border:1px solid var(--bd);border-radius:9px;background:var(--bg);color:var(--tx);font-size:14px;font-weight:400}
+textarea.ta{min-height:110px;resize:vertical}
+.pill{padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700;color:#fff}
+.muted{color:var(--tx2);font-size:13px}
+.stat{text-align:center;background:var(--bg);border-radius:10px;padding:14px}
+.stat b{display:block;font-size:30px;color:var(--p)}
+.bar-p{height:8px;background:var(--bd);border-radius:9px;overflow:hidden}
+.bar-p i{display:block;height:100%;background:var(--p)}
+details.cl{border:1px solid var(--bd);border-radius:10px;margin-bottom:7px;background:var(--card)}
+details.cl>summary{list-style:none;cursor:pointer;padding:11px 13px;display:grid;grid-template-columns:78px 1fr auto;gap:9px;align-items:center;font-size:14px}
+details.cl>summary::-webkit-details-marker{display:none}
+details.cl>summary b{color:var(--p)}
+details.cl .body{padding:0 13px 13px;border-top:1px solid var(--bd)}
+.reg{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--bd);font-size:13.5px;flex-wrap:wrap}
+.reg.ok{color:var(--ok)}
+.chip{border:1px solid var(--p);color:var(--p);background:transparent;border-radius:99px;padding:4px 11px;font-size:12.5px;margin:0 5px 5px 0}
+.chip.on{background:var(--p);color:#fff}
+.paper-wrap{background:var(--p);border-radius:14px;padding:12px}
+.paper{background:#fff;color:#111;padding:34px;border-radius:5px;font-size:15px;line-height:1.75;outline:none}
+.paper h1{font-size:22px;color:#064E3B;text-align:center}
+.paper h2{font-size:17px;color:#064E3B;border-bottom:2px solid #064E3B;margin:20px 0 8px;padding-bottom:3px}
+.paper p{margin:8px 0;text-align:justify;hyphens:auto}
+.paper table{border-collapse:collapse;width:100%;font-size:13.5px;margin:8px 0}
+.paper td,.paper th{border:1px solid #bbb;padding:5px 8px;text-align:left;vertical-align:top}
+.paper mark{background:#fde047}
+.ph{background:#FEF3C7;border:1.5px dashed #D97706;color:#92400E;padding:2px 6px;border-radius:5px;font-weight:600;cursor:pointer}
+.ph.filled{background:#D1FAE5;border:1.5px solid #059669;color:#065F46}
+.sig{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:50px}
+.sig div{text-align:center;border-top:2px solid #111;padding-top:7px}
+.fmt{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.fmt button{width:32px;height:30px;border:1px solid #ffffff55;background:#ffffff18;color:#fff;border-radius:7px;font-size:13px}
+dialog{border:1px solid var(--bd);border-radius:14px;background:var(--card);color:var(--tx);padding:0;width:min(980px,96vw);height:88dvh;margin:auto}
+dialog::backdrop{background:#0009}
+dialog .dh{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px 13px;border-bottom:1px solid var(--bd)}
+dialog .db{height:calc(100% - 52px);overflow:auto;padding:10px;display:grid;place-items:center}
+dialog iframe{width:100%;height:100%;border:0;background:#fff}
+dialog img{max-width:100%;max-height:100%}
+.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--p);color:#fff;padding:11px 18px;border-radius:99px;font-size:14px;z-index:200;box-shadow:0 10px 30px #0004;display:none}
+.toast.on{display:block}
+.lock{position:fixed;inset:0;background:#0F172A;color:#fff;display:grid;place-items:center;text-align:center;padding:30px;z-index:999}
+.eq{display:flex;gap:3px;align-items:flex-end;height:22px}
+.eq i{width:3px;background:var(--a);height:20%;border-radius:2px}
+.eq.on i{animation:b .8s ease-in-out infinite}
+.eq.on i:nth-child(2){animation-delay:.1s}.eq.on i:nth-child(3){animation-delay:.2s}.eq.on i:nth-child(4){animation-delay:.3s}.eq.on i:nth-child(5){animation-delay:.4s}
+@keyframes b{0%,100%{height:20%}50%{height:100%}}
+.mic.on{background:var(--crit)!important;color:#fff;border-color:var(--crit)!important}
+.alert{border-left:4px solid var(--p);background:var(--bg);padding:10px 12px;border-radius:0 9px 9px 0;margin-bottom:7px;font-size:13.5px}
+.alert.w{border-color:var(--warn)}.alert.c{border-color:var(--crit)}
+footer{text-align:center;padding:22px;color:var(--tx2);font-size:12px}
+@media print{.hd,.bar,.tabs,.menu,.no,.help,footer,.toast{display:none!important}main{padding:0;max-width:none}.card{border:0;padding:0;margin:0;box-shadow:none}.paper-wrap{background:none;padding:0}.paper{padding:0}}
 </style>
 </head>
 <body>
 
-<!-- ═══ HEADER ═══ -->
-<header class="top-header">
-  <div class="brand">
-    <span>🛡️</span>
-    SIGIA Pro
-  </div>
-  <div class="header-actions">
-    <button class="icon-btn" onclick="undoAction()" title="Deshacer (Ctrl+Z)">↶</button>
-    <button class="icon-btn" onclick="shareReport()" title="Compartir">📤</button>
-    <button class="icon-btn" onclick="toggleThemeMenu()" title="Cambiar tema">🎨</button>
-    <button class="icon-btn hamburger" id="hamburgerBtn" onclick="toggleMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+<header class="hd no">
+  <div class="brand">🛡️ <span>SIGIA<small style="font-weight:400;color:var(--tx2)"> Pro</small></span></div>
+  <div class="row">
+    <div class="eq" id="eq"><i></i><i></i><i></i><i></i><i></i></div>
+    <button class="ic" data-act="undo" title="Deshacer (Ctrl+Z)">↶</button>
+    <button class="ic" data-act="help" title="Cómo funciona">?</button>
+    <button class="ic" data-act="skins" title="Temas">🎨</button>
+    <button class="ic ham" data-act="menu" title="Menú"><span></span><span></span><span></span></button>
   </div>
 </header>
 
-<!-- ═══ MENÚ DESPLEGABLE ═══ -->
-<div class="dropdown-menu" id="dropdownMenu">
-  <div class="menu-section">
-    <h3>Perfil</h3>
-    <div class="menu-item" onclick="switchTab('perfil')">👤 Mi Perfil</div>
-    <div class="menu-item" onclick="switchTab('empresas')">🏢 Empresas</div>
-    <div class="menu-item" onclick="switchTab('equipo')">👥 Equipo</div>
-  </div>
-  <div class="menu-section">
-    <h3>Normas</h3>
-    <div class="menu-item" onclick="switchTab('isos')">📚 ISOs y Normas</div>
-    <div class="menu-item" onclick="switchTab('monitor')">🔍 Monitor Regulatorio</div>
-  </div>
-  <div class="menu-section">
-    <h3>Herramientas</h3>
-    <div class="menu-item" onclick="switchTab('asistente')">🤖 Asistente IA</div>
-    <div class="menu-item" onclick="switchTab('cursos')">🎓 Generador de Cursos</div>
-    <div class="menu-item" onclick="exportReport()">📥 Exportar Reporte</div>
-  </div>
+<div class="menu no" id="menu">
+  <h4>Trabajo</h4>
+  <div class="mi" data-go="inicio">🏠 Inicio</div>
+  <div class="mi" data-go="empresas">🏢 Empresas</div>
+  <div class="mi" data-go="normas">📚 Normas y Rack</div>
+  <div class="mi" data-go="auditoria">🔍 Auditoría</div>
+  <div class="mi" data-go="documento">📄 Generar documento</div>
+  <div class="mi" data-go="asistente">🤖 Asistente</div>
+  <h4>Herramientas</h4>
+  <div class="mi" data-go="monitor">📡 Monitor regulatorio</div>
+  <div class="mi" data-go="perfil">👤 Mi perfil y equipo</div>
+  <div class="mi" data-go="ajustes">⚙️ Licencia y respaldos</div>
+  <h4>Temas</h4>
+  <div id="skinList" class="row" style="padding:4px 6px"></div>
 </div>
 
-<!-- ═══ BARRA DE AUDIO GLOBAL ═══ -->
-<div class="audio-bar">
-  <button onclick="readAll()">🔊 Leer Todo</button>
-  <button onclick="stopAudio()">⏹ Parar</button>
-  <label>
-    Vel: <input type="range" id="speedCtrl" min="0.5" max="2" step="0.1" value="1" oninput="updateSpeed(this.value)">
-    <span id="speedVal">1.0x</span>
-  </label>
-  <label>
-    Vol: <input type="range" id="volCtrl" min="0" max="1" step="0.1" value="1" oninput="updateVolume(this.value)">
-    <span id="volVal">100%</span>
-  </label>
-  <label>
-    <input type="checkbox" id="showTime" checked onchange="toggleTime()"> Mostrar fecha/hora
-  </label>
+<div class="bar no">
+  <button class="btn s p" data-act="readAll">🔊 Leer sección</button>
+  <button class="btn s" data-act="stop">⏹ Parar</button>
+  <label>Idioma <select id="lang"></select></label>
+  <label>Voz <select id="voice" style="max-width:190px"></select></label>
+  <label>Vel <input type="range" id="rate" min=".5" max="2.5" step=".1" value="1"><b id="rateV">1x</b></label>
+  <label>Vol <input type="range" id="vol" min="0" max="1" step=".1" value="1"><b id="volV">100%</b></label>
+  <label><input type="checkbox" id="showDT" checked> Fecha/hora</label>
+  <span class="muted" id="dt"></span>
+  <span class="muted" id="gps">📍 —</span>
 </div>
 
-<!-- ═══ TABS ═══ -->
-<div class="tabs">
-  <div class="tab active" onclick="switchTab('inicio')">🏠 Inicio</div>
-  <div class="tab" onclick="switchTab('auditoria')">🔍 Auditoría</div>
-  <div class="tab" onclick="switchTab('informe')">📄 Informe</div>
-  <div class="tab" onclick="switchTab('asistente')">🤖 Asistente</div>
-</div>
+<nav class="tabs no" id="tabs"></nav>
+<main id="main"></main>
+<footer class="no">SIGIA Pro · Prototipo funcional basado en el documento y las ideas de <b>Óscar Ordóñez</b><br>Desarrollado por <b>Stack Labs</b> · Juan Carlos Pérez Martínez · Datos 100% locales en este dispositivo</footer>
 
-<!-- ═══ CONTENIDO PRINCIPAL ═══ -->
-<div class="main-content">
-
-  <!-- TAB: INICIO -->
-  <div class="tab-content active" id="tab-inicio">
-    <div class="card">
-      <div class="card-header">
-        <h2>👋 Bienvenido, Óscar</h2>
-        <button class="help-btn" onclick="toggleHelp('help-inicio')">?</button>
-      </div>
-      <div class="help-tooltip" id="help-inicio">
-        Esta es tu pantalla principal. Desde aquí accedes a todas las funciones del sistema. 
-        Presiona el botón "?" en cualquier sección para escuchar una explicación de para qué sirve.
-      </div>
-      
-      <div class="report-meta" id="datetimeDisplay">
-        <span>📅 <span id="currentDate"></span></span>
-        <span>🕐 <span id="currentTime"></span></span>
-        <span id="gpsLocation">📍 Obteniendo ubicación...</span>
-      </div>
-
-      <div class="mt-4">
-        <h3 style="margin-bottom: 12px;">Acciones Rápidas</h3>
-        <div class="flex" style="flex-wrap: wrap;">
-          <button class="btn btn-primary" onclick="switchTab('auditoria')">🔍 Nueva Auditoría</button>
-          <button class="btn btn-secondary" onclick="switchTab('informe')">📄 Ver Informe</button>
-          <button class="btn btn-accent" onclick="startVoiceMode()">🎙️ Modo Visita</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        <h2>📊 Estadísticas</h2>
-        <button class="help-btn" onclick="toggleHelp('help-stats')">?</button>
-      </div>
-      <div class="help-tooltip" id="help-stats">
-        Aquí ves un resumen de tu actividad: cuántas auditorías has hecho, cuántos hallazgos has registrado, y tu progreso general.
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
-        <div style="text-align: center; padding: 20px; background: var(--bg-main); border-radius: 8px;">
-          <div style="font-size: 32px; font-weight: 700; color: var(--primary);" id="statAudits">0</div>
-          <div class="text-sm">Auditorías</div>
-        </div>
-        <div style="text-align: center; padding: 20px; background: var(--bg-main); border-radius: 8px;">
-          <div style="font-size: 32px; font-weight: 700; color: var(--accent);" id="statFindings">0</div>
-          <div class="text-sm">Hallazgos</div>
-        </div>
-        <div style="text-align: center; padding: 20px; background: var(--bg-main); border-radius: 8px;">
-          <div style="font-size: 32px; font-weight: 700; color: var(--secondary);" id="statCompanies">0</div>
-          <div class="text-sm">Empresas</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB: AUDITORÍA -->
-  <div class="tab-content" id="tab-auditoria">
-    <div class="card">
-      <div class="card-header">
-        <h2>🔍 Auditoría en Curso</h2>
-        <button class="help-btn" onclick="toggleHelp('help-audit')">?</button>
-      </div>
-      <div class="help-tooltip" id="help-audit">
-        Selecciona la norma ISO que estás auditando. El sistema filtrará las preguntas y cláusulas relevantes. 
-        Puedes cambiar entre normas en cualquier momento.
-      </div>
-
-      <div class="form-group">
-        <label>Empresa a Auditar</label>
-        <select id="auditCompany" onchange="loadCompanyData()">
-          <option value="">-- Seleccionar Empresa --</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Norma / ISO Activa</label>
-        <div class="iso-selector">
-          <button class="iso-btn active" onclick="selectISO('sqf', this)">SQF Ed. 10</button>
-          <button class="iso-btn" onclick="selectISO('iso22000', this)">ISO 22000</button>
-          <button class="iso-btn" onclick="selectISO('fssc', this)">FSSC 22000</button>
-          <button class="iso-btn" onclick="selectISO('brc', this)">BRCGS</button>
-          <button class="iso-btn" onclick="selectISO('nom251', this)">NOM-251</button>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Cláusula / Sección</label>
-        <select id="clauseSelect">
-          <option value="">-- Seleccionar Cláusula --</option>
-          <option value="2.1">2.1 Compromiso de la Gerencia</option>
-          <option value="2.4">2.4 Sistema de Seguridad Alimentaria</option>
-          <option value="11.2">11.2 Operación de la Planta</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Hallazgo / Observación</label>
-        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-          <button class="btn btn-secondary" onclick="startDictation('findingText')">🎙️ Dictar</button>
-          <button class="btn btn-secondary" onclick="startOCR()">📷 Escanear Documento</button>
-        </div>
-        <textarea id="findingText" placeholder="Describe el hallazgo..."></textarea>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>Severidad</label>
-          <select id="severity">
-            <option value="minor">Menor</option>
-            <option value="major">Mayor</option>
-            <option value="critical">Crítico</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Fotografía (opcional)</label>
-          <input type="file" id="photoUpload" accept="image/*" capture="environment">
-        </div>
-      </div>
-
-      <button class="btn btn-primary" onclick="addFinding()">➕ Agregar Hallazgo</button>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        <h2>📋 Hallazgos Registrados</h2>
-        <button class="help-btn" onclick="toggleHelp('help-findings')">?</button>
-      </div>
-      <div class="help-tooltip" id="help-findings">
-        Aquí ves todos los hallazgos que has registrado en esta auditoría. Puedes editarlos, eliminarlos o exportarlos.
-      </div>
-      <div id="findingsList">
-        <p class="text-sm" style="text-align: center; padding: 20px;">No hay hallazgos registrados aún</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB: INFORME -->
-  <div class="tab-content" id="tab-informe">
-    <div class="card">
-      <div class="card-header">
-        <h2>📄 Informe Final</h2>
-        <button class="help-btn" onclick="toggleHelp('help-report')">?</button>
-      </div>
-      <div class="help-tooltip" id="help-report">
-        Este es el reporte final que se entregará al cliente. Puedes editarlo, agregar notas privadas, y exportarlo en diferentes formatos.
-      </div>
-
-      <div class="report-header">
-        <div>
-          <h3 id="reportTitle">Informe de Auditoría</h3>
-          <p class="text-sm" id="reportCompany">Empresa no seleccionada</p>
-        </div>
-        <div class="report-meta" id="reportDatetime">
-          <span>📅 <span id="reportDate"></span></span>
-          <span>🕐 <span id="reportTime"></span></span>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Resumen Ejecutivo</label>
-        <textarea id="executiveSummary" placeholder="Escribe un resumen general de la auditoría..."></textarea>
-      </div>
-
-      <div class="form-group">
-        <label>Notas Privadas del Consultor (no se incluyen en el reporte final)</label>
-        <textarea id="privateNotes" placeholder="Tus notas personales, ideas para la próxima visita, etc." style="background: #FEF3C7; border-color: #F59E0B;"></textarea>
-      </div>
-
-      <div class="flex" style="flex-wrap: wrap;">
-        <button class="btn btn-primary" onclick="exportReport()">📥 Exportar a Word</button>
-        <button class="btn btn-secondary" onclick="exportPDF()">📄 Exportar a PDF</button>
-        <button class="btn btn-accent" onclick="shareReport()">📤 Compartir</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB: ASISTENTE -->
-  <div class="tab-content" id="tab-asistente">
-    <div class="card">
-      <div class="card-header">
-        <h2>🤖 Asistente Inteligente</h2>
-        <button class="help-btn" onclick="toggleHelp('help-assistant')">?</button>
-      </div>
-      <div class="help-tooltip" id="help-assistant">
-        Pregúntale al asistente sobre cualquier cláusula de la norma ISO que tengas activa. 
-        El sistema buscará en la base de datos y te dará respuestas precisas.
-      </div>
-
-      <div class="chat-container" id="chatContainer">
-        <div class="chat-message assistant">
-          Hola Óscar, soy tu asistente de inocuidad alimentaria. ¿En qué puedo ayudarte hoy?
-        </div>
-      </div>
-
-      <div class="chat-input-area">
-        <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." onkeypress="if(event.key==='Enter')sendChat()">
-        <button class="btn btn-primary" onclick="startDictation('chatInput')">🎙️</button>
-        <button class="btn btn-primary" onclick="sendChat()">Enviar</button>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<!-- ═══ FOOTER ═══ -->
-<div class="footer">
-  <p>SIGIA Pro · Prototipo basado en las ideas de Óscar Ordóñez</p>
-  <p>Desarrollado por Stack Labs · Juan Carlos Pérez Martínez</p>
-  <p class="mt-2">Versión 1.0 · Demo</p>
-</div>
+<dialog id="dlg"><div class="dh"><b id="dlgT"></b><span class="row"><a class="btn s" id="dlgD">Descargar</a><button class="btn s" data-act="dlgZoom">🔍 Zoom</button><button class="btn s d" data-act="dlgDel">Eliminar</button><button class="btn s" data-act="dlgX">Cerrar</button></span></div><div class="db" id="dlgB"></div></dialog>
+<div class="toast" id="toast"></div>
+<input type="file" id="fileUp" hidden>
+<input type="file" id="imgUp" accept="image/*" capture="environment" hidden>
+<input type="file" id="jsonUp" accept=".json" hidden>
 
 <script>
-// ═══ ESTADO GLOBAL ═══
-const state = {
-  currentISO: 'sqf',
-  currentCompany: null,
-  findings: [],
-  audio: { speed: 1, volume: 1 },
-  history: [],
-  companies: [
-    { id: 1, name: 'Alimentos del Valle S.A. de C.V.', manager: 'Lic. Roberto Gómez', address: 'Av. Industria 123, Parque Industrial, México', phone: '+52 55 1234 5678', email: 'contacto@alimentosdelvalle.com', products: 'Salsas y aderezos' },
-    { id: 2, name: 'Procesadora del Norte', manager: 'Ing. Laura Martínez', address: 'Carretera Nacional Km 45, Monterrey, NL', phone: '+52 81 9876 5432', email: 'info@procesadoranorte.com', products: 'Cárnicos frescos y congelados' }
-  ]
+/* ══════════════════════════════════════════════════════════════
+   1) LICENCIA  ·  EDITA SOLO ESTE BLOQUE POR CLIENTE
+   ══════════════════════════════════════════════════════════════ */
+const LICENCIA = {
+  activa: true,                       // ← false =软件 bloqueado
+  clave: "OSCAR-2026-PREMIUM",
+  cliente: "Óscar Ordóñez",
+  empresa: "Consultoría en Inocuidad Alimentaria",
+  tipo: "consultor",
+  activacion: "2026-01-01",
+  expiracion: "2027-12-31",           // ← fecha de corte
+  maxEmpresas: 100,
+  features:{ocr:true, monitor:true, docs:true, voz:true},
+  soporte:{email:"juan.carlos@stacklabs.com", tel:"+52 000 000 0000"}
 };
 
-// ═══ INICIALIZACIÓN ═══
-window.addEventListener('DOMContentLoaded', () => {
-  updateDateTime();
-  setInterval(updateDateTime, 1000);
-  getLocation();
-  loadCompanies();
-  updateStats();
+/* ══════════════════════════════════════════════════════════════
+   2) RACK DE CONOCIMIENTO
+   SQF Ed.10 = transcripción íntegra del documento de Óscar
+   ══════════════════════════════════════════════════════════════ */
+const SQF={2:`2.1|Compromiso de la gerencia|Manual de calidad;Política de seguridad alimentaria;Especificaciones de los clientes;Descripción de puesto;Organigrama de la empresa;Plan de evaluación de la cultura de seguridad alimentaria;Programas de capacitación|Firmada por el gerente. Ampliamente difundida. Mejora continua de la cultura de seguridad alimentaria.
+2.1.2|Revisión por parte de la gerencia|Procedimiento de revisión;Programa de revisión;Reporte de avances;Tendencia de reclamos;Medición general del desempeño|Cambios al sistema. Resultados anuales de auditorías internas, de recalls, de reclamos, etc.
+2.1.3|Manejo de quejas|Procedimiento para manejo de quejas de los clientes;Análisis de causa raíz;Reporte de acciones preventivas y correctivas
+2.2|Control de documentos y registros|Procedimientos para control de documentos y registros
+2.2.1|Administración del sistema de seguridad alimentaria|Procedimiento de seguridad alimentaria;Manual de calidad
+2.3|Especificaciones, desarrollo de productos y proveedores aprobados|Especificación general del producto;Listado de proveedores aprobados
+2.3.1|Desarrollo de productos|Procedimiento para desarrollo de nuevos productos;Descripción de productos;Fórmulas de productos
+2.3.2|Especificaciones|Especificaciones de productos e ingredientes
+2.3.3|Control de maquiladores|Contrato de maquiladores;Auditorías a maquiladores;Reporte de auditorías a maquiladores
+2.3.4|Programa de aprobación de proveedores|Procedimiento para aprobación;Programa de evaluación;Auditorías a proveedores
+2.3.5|Administración del cambio|Procedimiento para gestión de cambios;Evaluación de riesgo por los cambios
+2.4|Sistema de seguridad alimentaria|
+2.4.1|Legislación alimentaria|Lista de normas aplicables al giro y tipo de empresa;Procedimiento para mantenerse informados sobre los cambios en la normatividad alimentaria
+2.4.2|Buenas prácticas industriales|
+2.4.2.1|Buenas prácticas de manufactura|Procedimiento BPM;Evaluación de riesgo
+2.4.3|Plan de seguridad alimentaria|Plan de seguridad alimentaria;Diagrama de flujo del proceso;Plan HACCP completo;Constancias de entrenamiento del equipo HACCP
+2.4.4|Muestreo, inspección y análisis|Procedimiento de muestreo;Procedimiento para análisis de productos;Procedimiento para liberación de productos;Acreditación EMA de laboratorios externos
+2.4.5|Productos y materiales no conformes|Procedimiento para manejo de productos y materiales no conformes
+2.4.6|Retrabajo de productos|Procedimiento para retrabajo y/o reproceso de productos;Procedimiento de trazabilidad de productos retrabajados
+2.4.7|Liberación de productos|Procedimiento para liberación de productos
+2.4.8|Monitoreo ambiental|Evaluación de riesgo ambiental;Procedimiento de monitoreo ambiental;Procedimientos de muestreo ambiental;Tendencias de resultados externos e internos
+2.5|Validación y verificación|
+2.5.1|Validación y efectividad|Procedimiento para validar el plan de seguridad alimentaria;Evaluación de buenas prácticas industriales
+2.5.2|Verificación|Plan de inspecciones de buenas prácticas industriales;Planes de verificación relevantes
+2.5.3|Correcciones y acciones preventivas y correctivas|Procedimiento para ejecutar correcciones, acciones preventivas y correctivas;Método de análisis de causa raíz;Tendencia de las desviaciones
+2.5.4|Auditorías internas|Procedimiento para auditorías internas;Plan anual de auditorías;Equipo auditor;Lista de verificación para auditoría interna;Evaluación de auditoría;Análisis de causa raíz de las desviaciones;Tendencias de los hallazgos;Comunicación de los resultados
+2.6|Trazabilidad de los productos y manejo de crisis|Evidencias de los ejercicios de trazabilidad;Formatos y registros de los ejercicios
+2.6.1|Identificación de los productos|Procedimiento para identificación de los productos;Procedimiento para cambios de formato
+2.6.2|Trazabilidad de productos|Procedimiento para trazabilidad de productos terminados, materiales e ingredientes;Procedimiento anual para ejercicio de trazabilidad de productos;Tendencias y resultados del ejercicio
+2.6.3|Retiro y retirada de productos|Procedimientos para retiro de productos;Ejercicio anual de retiro de producto;Resultados y tendencias
+2.6.4|Planeación y manejo de crisis|Evaluación de riesgos;Equipo para manejo de crisis;Procedimiento para manejo de crisis;Ejercicio anual para evaluar el plan;Resultados y tendencias
+2.7|Defensa alimentaria y fraude alimentario|
+2.7.1.1|Defensa alimentaria|Evaluación de riesgos;Plan de defensa alimentaria
+2.7.2.1|Fraude alimentario|Evaluación de vulnerabilidades;Plan de mitigación de amenazas;Procedimiento para evaluación del plan;Ejercicio anual de evaluación del plan;Resultados y tendencias
+2.8|Manejo de alérgenos|Procedimiento para manejo de alérgenos;Evaluación de riesgos de contaminación;Análisis de riesgos de contaminación por alérgenos;Plan de mitigación en caso de contaminación;Lista de alérgenos;Procedimiento de limpieza y sanitización
+2.9|Capacitación|Procedimiento para detectar necesidades de capacitación;Plan anual de capacitación;Evaluación del plan;Registros de la capacitación del personal`,
+11:`11.1|Ubicación de la planta e instalaciones|
+11.1.1|Evaluación de riesgos|Evaluación de riesgos
+11.1.2|Materiales de construcción|Planos de las instalaciones
+11.1.3|Iluminación y accesorios para iluminación|Estudio de iluminación de las instalaciones;Especificaciones técnicas de las lámparas
+11.1.4|Área de control de calidad e inspección|
+11.1.5|Ventilación|Especificación de filtros EPA;Planos de ubicación de los filtros
+11.1.6|Equipos y utensilios|Procedimiento de compra de equipos;Procedimiento para control y almacenamiento de equipos;Procedimiento para limpieza de utensilios
+11.1.7|Terrenos y vías|Procedimientos de inspección y limpieza;Procedimiento para mantenimiento de vías
+11.2|Operación de la planta|
+11.2.1|Reparaciones y mantenimiento|Procedimientos para mantenimiento preventivo;Procedimientos para mantenimiento correctivo;Estadística y tendencias de las fallas;Especificación técnica de lubricantes grado alimenticio;Estadística y tendencias del cumplimiento al programa de mantenimiento;Procedimientos de trabajo de buenas prácticas industriales
+11.2.2|Contratistas y personal de mantenimiento|Procedimiento para control de contratistas;Procedimientos de trabajo para contratistas;Procedimientos de trabajo de buenas prácticas industriales
+11.2.3|Calibración|Procedimientos para calibración de equipos;Procedimientos de verificación de equipos;Programa de calibración de equipos;Proveedor designado para calibración;Acreditación del proveedor designado para calibración;Registros de calibración de equipos
+11.2.4|Prevención de plagas|Procedimiento para control de plagas;Programa de inspección;Contrato de proveedor;Entrenamiento del proveedor;Lista de productos aprobados;Información técnica de los productos utilizados;Licenciamiento del proveedor;Reporte de trabajo o aplicaciones;Tendencias de usos y consumo de producto;Reporte de hallazgos del proveedor
+11.2.5|Limpieza y saneamiento|Procedimientos para limpieza de equipos y superficies;Programa maestro de limpieza;Programa de validación de la limpieza;Lista de productos químicos aprobados para limpieza;Diagrama de flujo de estación de CIP
+11.3|Bienestar e higiene personal|Procedimiento para control de enfermedades o heridas;Plan de buenas prácticas industriales
+11.3.2|Lavado de manos|Layout de estaciones para lavado de manos;Procedimientos para limpieza de manos;Lista de productos químicos utilizados para lavado de manos
+11.3.3|Vestimenta y efectos personales|Procedimiento para control de uniformes y efectos personales;Procedimiento para lavado de uniformes;Procedimiento para validación de limpieza de uniformes
+11.3.4|Visitantes|Procedimiento para control de acceso de visitantes
+11.3.5|Servicios para el personal (vestidores, baños, comedor)|Programa de limpieza de instalaciones al personal;Plano de las instalaciones para el personal
+11.4|Prácticas del personal de proceso|
+11.5|Suministro de agua, hielo y aire|Diagrama de flujo línea de suministro de agua potable;Planos del área de almacenamiento de agua potable;Programa de limpieza del área de almacenamiento de agua
+11.5.2|Tratamiento del agua|Procedimiento para tratamiento del agua potable;Diagrama de flujo de los equipos para tratamiento de agua;Programa de monitoreo y validación de la efectividad del tratamiento del agua
+11.5.3|Calidad del agua|Programa de análisis microbiológicos del agua;Resultados y tendencias de los análisis;Proveedor aprobado para los análisis microbiológicos;Acreditación del proveedor aprobado;Normatividad local para cumplir la calidad del agua
+11.5.4|Suministro de hielo|Procedimiento para compra de hielo;Procedimiento para manejo de hielo;Programa de mantenimiento para el área de almacenamiento de hielo
+11.5.5|Aire y otros gases|
+11.6|Recepción, almacenamiento y transporte|Procedimiento para almacenar productos;Análisis de riesgos
+11.6.2|Almacenamiento en frío, congelamiento y enfriamiento|Planos de construcción;Layout de las cámaras;Diagrama de flujo de los equipos;Capacidad instalada de los equipos;Procedimiento de monitoreo de temperatura
+11.6.3|Almacenamiento de ingredientes secos y empaques|Layout del almacén
+11.6.4|Almacenamiento de productos químicos peligrosos y tóxicos|Lista de productos químicos;Programa de entrenamiento para el personal involucrado;Procedimiento para manejo y almacenamiento;Procedimiento para manejo de derrames
+11.6.5|Prácticas para carga, transporte y descarga|Procedimientos para carga, descarga y transporte;Procedimiento para inspección de vehículos antes de la carga;Procedimiento para monitoreo de temperatura;Registros de temperatura
+11.7|Separación de funciones|Organigrama;Descripciones de puesto
+11.7.1|Procesos de alto riesgo|Diagrama de flujo;Layout del área;Plan anual de monitoreo del aire;Organigrama del personal involucrado;Procedimiento para manejo de uniformes;Procedimiento para control de acceso
+11.7.2|Descongelación de alimentos|Diagrama de flujo;Layout del área;Procedimiento para descongelamiento
+11.7.3|Control de la contaminación con materia extraña|Procedimiento para control de la materia extraña;Programa de inspección de los equipos involucrados;Programa de control de los utensilios metálicos involucrados;Procedimiento para manejo de vidrio quebrado
+11.7.4|Detección de materia extraña|Procedimiento para control de materia extraña;Plan de monitoreo de productos;Procedimientos para manejo de productos contaminados
+11.8|Eliminación de desechos|Procedimientos para manejo de desechos;Layout del área;Programa de limpieza`};
+
+const OTRAS=`ISO22000|4|Contexto de la organización|Comprensión de la organización y su contexto;Partes interesadas pertinentes;Alcance del SGIA
+ISO22000|5|Liderazgo|Política de inocuidad;Roles, responsabilidades y autoridades;Compromiso de la dirección
+ISO22000|6|Planificación|Acciones para abordar riesgos y oportunidades;Objetivos del SGIA;Planificación de cambios
+ISO22000|7|Apoyo|Recursos;Competencia y toma de conciencia;Comunicación;Información documentada
+ISO22000|8.2|Programas de prerrequisitos (PPR)|Programas de prerrequisitos documentados y aprobados
+ISO22000|8.3|Sistema de trazabilidad|Procedimiento de trazabilidad;Registros de trazabilidad;Ejercicio de trazabilidad
+ISO22000|8.4|Preparación y respuesta ante emergencias|Procedimiento de emergencias;Simulacros documentados
+ISO22000|8.5|Control de peligros|Análisis de peligros;Validación de medidas de control;Plan de control de peligros (PCC y PPRO);Descripción de producto y uso previsto;Diagramas de flujo
+ISO22000|8.6|Actualización de la información del SGIA|Revisión y actualización del plan
+ISO22000|8.7|Control del seguimiento y la medición|Calibración de equipos;Registros de monitoreo
+ISO22000|8.8|Verificación del control de peligros|Programa de verificación;Auditoría interna;Evaluación de resultados
+ISO22000|8.9|Control de producto y proceso no conforme|Correcciones;Acciones correctivas;Manejo de producto potencialmente inseguro;Retiro de producto
+ISO22000|9|Evaluación del desempeño|Seguimiento y medición;Auditoría interna;Revisión por la dirección
+ISO22000|10|Mejora|No conformidad y acción correctiva;Mejora continua;Actualización del SGIA
+FSSC22000|AD-1|Gestión de servicios y materiales comprados|Aprobación de proveedores;Especificaciones;Laboratorios externos acreditados
+FSSC22000|AD-2|Etiquetado de producto|Cumplimiento legal de etiquetado;Declaración de alérgenos
+FSSC22000|AD-3|Defensa alimentaria (Food Defense)|Evaluación de amenazas;Plan de defensa alimentaria
+FSSC22000|AD-4|Mitigación del fraude alimentario|Evaluación de vulnerabilidades;Plan de mitigación
+FSSC22000|AD-5|Uso de logotipos y certificación|Control de uso de marcas del esquema
+FSSC22000|AD-6|Gestión de alérgenos|Plan de alérgenos;Validación de limpieza
+FSSC22000|AD-7|Monitoreo ambiental|Programa de monitoreo ambiental basado en riesgo
+FSSC22000|AD-8|Formulación de productos|Control de formulación y cambios
+FSSC22000|AD-9|Transporte y entrega|Control de transporte;Cadena de frío
+FSSC22000|AD-10|Prevención de contaminación cruzada|Separación de funciones;Control de flujo
+FSSC22000|AD-11|Cultura de inocuidad|Plan de cultura de inocuidad y calidad
+BRCGS|1|Compromiso de la alta dirección|Política;Objetivos;Revisión por la dirección;Recursos
+BRCGS|2|Plan de inocuidad HACCP|Equipo HACCP;Diagramas;Análisis de peligros;PCC;Validación
+BRCGS|3|Sistema de gestión de inocuidad y calidad|Control documental;Auditorías internas;Proveedores;Trazabilidad;Recall;Gestión de alérgenos
+BRCGS|4|Estándares del sitio|Ubicación;Mantenimiento;Limpieza;Plagas;Servicios;Seguridad del sitio
+BRCGS|5|Control del producto|Etiquetado;Análisis;Autenticidad;Envasado;Alergenos
+BRCGS|6|Control del proceso|Control de operaciones;Calibración;Verificación de proceso
+BRCGS|7|Personal|Capacitación;Higiene personal;Ropa protectora;Control médico
+NOM251|5|Disposiciones generales|Licencia sanitaria;Aviso de funcionamiento;Responsable sanitario
+NOM251|6|Instalaciones y áreas|Ubicación;Diseño y distribución;Pisos, paredes y techos;Iluminación;Ventilación;Drenajes
+NOM251|7|Servicios|Agua potable (NOM-127);Vapor grado alimenticio;Aire comprimido filtrado;Hielo
+NOM251|8|Higiene del personal|Certificado de salud;Capacitación;Uniforme;Lavado de manos;Prohibiciones
+NOM251|9|Control de plagas|Programa documentado;Proveedor autorizado;Registros de aplicación
+NOM251|10|Limpieza y sanitización|POES;Programa maestro;Productos autorizados;Registros
+NOM251|11|Control de materias primas|Proveedores;Especificaciones;Recepción;PEPS
+NOM251|12|Almacenamiento y transporte|Tarimas;Temperatura;Vehículos limpios;Registros
+NOM251|13|Etiquetado|NOM-051;Lote;Caducidad;Alérgenos
+NOM251|14|Control de proceso|Parámetros;Monitoreo;Acciones correctivas;Registros
+CODEX|P1|Análisis de peligros|Listado de peligros biológicos, químicos, físicos y alérgenos;Evaluación de severidad y probabilidad
+CODEX|P2|Determinación de PCC|Árbol de decisiones del Codex aplicado al diagrama de flujo
+CODEX|P3|Límites críticos|Criterios medibles y validados para cada PCC
+CODEX|P4|Sistema de vigilancia|Registros de monitoreo;Frecuencia;Responsable capacitado
+CODEX|P5|Acciones correctivas|Disposición del producto;Corrección de la causa
+CODEX|P6|Verificación|Auditorías;Calibración;Análisis de producto;Revisión del plan
+CODEX|P7|Documentación y registros|Plan HACCP documentado;Registros conservados`;
+
+const EXTRA=[
+{id:'codex-haccp',norma:'CODEX',titulo:'Los 7 principios del sistema HACCP (CXC 1-1969, rev. 2020)',fuente:'https://www.fao.org/fao-who-codexalimentarius',tags:'haccp pcc peligros codex principios',
+txt:`Los siete principios del HACCP son: 1) análisis de peligros; 2) determinación de los puntos críticos de control; 3) establecimiento de límites críticos; 4) sistema de vigilancia; 5) acciones correctivas; 6) procedimientos de verificación; 7) documentación y registros. Peligros típicos: biológicos (Salmonella, Listeria, E. coli, Clostridium), químicos (pesticidas, metales pesados, micotoxinas, alérgenos), físicos (vidrio, metal, plástico duro, madera). El árbol de decisiones del Codex determina si una etapa es PCC: si la etapa está diseñada para eliminar el peligro y no existe una etapa posterior que lo controle, es PCC. Los PPR controlan el entorno; los PPRO son medidas de control con criterios de acción en lugar de límites críticos.`},
+{id:'alergenos',norma:'FDA/SQF',titulo:'Manejo de alérgenos y contaminación cruzada',fuente:'https://www.fda.gov/food/food-labeling-nutrition',tags:'alergenos big9 contamination etiquetado limpieza',
+txt:`Los nueve alérgenos de declaración obligatoria en EE.UU. (Big 9) son: leche, huevo, pescado, crustáceos, nuez de árbol, cacahuate, trigo, soya y sésamo (ajonjolí, obligatorio desde 2023). El control exige: inventario de alérgenos por materia prima y producto, almacenamiento segregado e identificado, código de colores en utensilios, programación de producción colocando los productos con alérgeno al final, limpieza validada entre cambios con pruebas específicas (ELISA o hisopos de proteína), capacitación documentada y etiquetado correcto. La leyenda precautoria "puede contener" solo se justifica cuando existe un riesgo residual real demostrado, nunca como sustituto de la limpieza.`},
+{id:'recalls',norma:'FDA',titulo:'Clasificación de recalls y ejercicio de retiro',fuente:'https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts',tags:'recall retiro crisis clase trazabilidad simulacro',
+txt:`Clase I: probabilidad razonable de daño grave o muerte (Listeria en producto listo para consumo, alérgeno no declarado, vidrio, toxina botulínica). Clase II: daño temporal o reversible. Clase III: sin daño probable a la salud, defectos de etiquetado menores. El retiro exige identificar el lote, evaluar el riesgo, notificar a autoridad y clientes, recuperar producto, definir disposición final y verificar la efectividad. Los esquemas GFSI piden al menos un ejercicio anual de trazabilidad y retiro, con objetivo de cerrar la trazabilidad completa en cuatro horas y alcanzar el 100 por ciento del balance de masas.`},
+{id:'bpm',norma:'Varias',titulo:'Los diez pilares de las Buenas Prácticas de Manufactura',fuente:'FAO/OMS · NOM-251-SSA1-2009',tags:'bpm gmp higiene personal limpieza instalaciones',
+txt:`1) instalaciones con diseño sanitario y flujo unidireccional; 2) equipos de grado alimenticio con diseño limpiable y mantenimiento preventivo; 3) personal capacitado, sano y con higiene estricta; 4) agua potable con análisis periódicos; 5) control de plagas con proveedor autorizado; 6) programa maestro de limpieza y sanitización validado; 7) control de materias primas y proveedores aprobados; 8) trazabilidad y PEPS; 9) control de proceso con monitoreo de parámetros; 10) documentación y registros vigentes. La verificación de BPM se realiza con listas de chequeo por área, frecuencia definida y análisis de tendencias de desviaciones.`},
+{id:'frases',norma:'Consultoría',titulo:'Banco de frases profesionales para hallazgos',fuente:'Práctica de consultoría',tags:'frases hallazgos redaccion recomendacion causa raiz',
+txt:`Aperturas: "Durante el recorrido por las instalaciones se observó…", "La revisión documental evidenció que…", "Se verificó que no se cuenta con evidencia objetiva de…". Menor: desviación puntual que no compromete la inocuidad. Mayor: ausencia o falla sistémica de un requisito del código. Crítica: condición que representa riesgo inminente para la salud del consumidor o incumplimiento legal. Recomendación: verbo en infinitivo + acción específica + referencia normativa + responsable + plazo. Causa raíz: cinco porqués, Ishikawa, AMEF o Pareto, con verificación posterior de la eficacia. Los plazos de cierre dependen de la edición vigente del código y del organismo de certificación: confírmalos siempre con el esquema aplicable.`},
+{id:'agua',norma:'NOM-251/NOM-127',titulo:'Control de agua potable, hielo y aire',fuente:'DOF · NOM-127-SSA1',tags:' agua hielo aire analisis microbiologico cloro',
+txt:`El agua que contacta alimento o superficies debe cumplir la NOM-127-SSA1. El programa incluye: diagrama de la red, planos del almacenamiento, programa de limpieza y desinfección de cisternas, monitoreo de cloro residual con frecuencia definida, análisis microbiológicos y fisicoquímicos por laboratorio acreditado EMA, y análisis de tendencias. El hielo se fabrica con agua potable y se maneja como alimento. El aire comprimido que contacta producto se filtra y se controla para aceite, partículas y humedad.`},
+{id:'cultura',norma:'SQF/GFSI',titulo:'Cultura de inocuidad alimentaria',fuente:'GFSI · SQF Ed.10',tags:'cultura compromiso liderazgo capacitacion',
+txt:`La cultura de inocuidad se evalúa con un plan documentado que incluye: visión y valores comunicados por la dirección, participación del personal, medición mediante encuestas o indicadores de comportamiento, capacitación continua y acciones derivadas de los resultados. Evidencias típicas: plan anual, actas de comunicación, resultados de encuestas, indicadores de reporte de desviaciones por el propio personal y seguimiento de la gerencia.`}
+];
+
+/* ══════════════════════════════════════════════════════════════
+   3) ÍNDICE / MOTOR RAG
+   ══════════════════════════════════════════════════════════════ */
+const parseSQF=t=>t.split('\n').map(l=>{const[c,ti,r='',o='']=l.split('|');return{id:'sqf-'+c,norma:'SQF',modulo:c.startsWith('11.')?'11':'2',codigo:c,titulo:ti,regs:r?r.split(';'):[],obs:o,tags:(c+' '+ti+' '+r).toLowerCase()}});
+const CLA=[...parseSQF(SQF[2]),...parseSQF(SQF[11])];
+const OTR=OTRAS.split('\n').map(l=>{const[n,c,t,r='']=l.split('|');return{id:n+'-'+c,norma:n,codigo:c,titulo:t,regs:r?r.split(';'):[],obs:'',tags:(n+' '+c+' '+t+' '+r).toLowerCase()}});
+const DOCS=[...CLA,...OTR,...EXTRA.map(e=>({...e,codigo:e.id,regs:[],obs:''}))];
+const NORMAS=[['SQF','SQF Edición 10 · Módulos 2 y 11','Documento base de Óscar Ordóñez',0],['ISO22000','ISO 22000:2018','iso.org',1],['FSSC22000','FSSC 22000 (requisitos adicionales)','fssc.com',1],['BRCGS','BRCGS Food Safety Issue 9','brcgs.com',1],['NOM251','NOM-251-SSA1-2009','dof.gob.mx',0],['CODEX','Codex Alimentarius · HACCP','fao.org',0],['FDA','FDA · Recalls y guías','fda.gov',0]];
+const nm=s=>(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+const STOP=new Set('de la el los las y en que un una del al se por con para es lo como me cual cuales necesito requiere pide piden clausula registros documentos norma hay sobre'.split(' '));
+function rag(q,norma){
+  const n=nm(q),ws=[...new Set(n.split(/\W+/).filter(w=>w.length>2&&!STOP.has(w)))];
+  const codes=[...n.matchAll(/\b\d{1,2}(?:\.\d{1,3}){1,3}\b/g)].map(m=>m[0]);
+  return DOCS.map(d=>{
+    if(norma&&norma!=='TODAS'&&d.norma!==norma)return{d,s:0};
+    let s=0;const t=nm(d.titulo),x=nm((d.txt||'')+' '+(d.regs||[]).join(' ')+' '+(d.obs||''));
+    if(d.codigo&&codes.includes(d.codigo))s+=120;
+    ws.forEach(w=>{const k=w.slice(0,5);if(t.includes(k))s+=8;if(nm(d.tags||'').includes(k))s+=4;s+=(x.split(k).length-1)*2});
+    return{d,s}}).filter(r=>r.s>7).sort((a,b)=>b.s-a.s).slice(0,8);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   4) ESTADO + IndexedDB
+   ══════════════════════════════════════════════════════════════ */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const DEF={skin:'',help:0,showDT:1,lang:'es-MX',voice:'',rate:1,vol:1,view:'inicio',norma:'SQF',empId:'',
+  perfil:{n:'Óscar Ordóñez',c:'Ingeniero Consultor en Inocuidad Alimentaria',tel:'',mail:'',reg:'',firma:''},
+  equipo:[],doc:{tipo:'aud',cl:'',folio:'',titulo:'',fecha:new Date().toISOString().slice(0,10),showF:1,html:'',notas:''}};
+let S=Object.assign({},DEF,JSON.parse(localStorage.getItem('sigia_prefs')||'{}'));
+S.perfil=Object.assign({},DEF.perfil,S.perfil);S.doc=Object.assign({},DEF.doc,S.doc);
+const save=()=>localStorage.setItem('sigia_prefs',JSON.stringify(S));
+let EMP=[],HAL=[],DOCS_DB=[],UNDO=[],GEO=null,CUR=null,CURURL=null;
+
+const DBP=new Promise((ok,ko)=>{const r=indexedDB.open('sigia_pro',1);
+ r.onupgradeneeded=e=>{const db=e.target.result;
+  ['empresas','hallazgos','archivos','textos'].forEach(s=>{if(!db.objectStoreNames.contains(s))db.createObjectStore(s,{keyPath:'id'})})};
+ r.onsuccess=()=>ok(r.result);r.onerror=()=>ko(r.error)});
+async function tx(store,mode,fn){const db=await DBP;return new Promise((ok,ko)=>{const q=fn(db.transaction(store,mode).objectStore(store));q.onsuccess=()=>ok(q.result);q.onerror=()=>ko(q.error)})}
+const put=(s,v)=>tx(s,'readwrite',o=>o.put(v)),del=(s,k)=>tx(s,'readwrite',o=>o.delete(k)),all=s=>tx(s,'readonly',o=>o.getAll()),get=(s,k)=>tx(s,'readonly',o=>o.get(k));
+async function snap(){UNDO.push(JSON.stringify({EMP,HAL}));if(UNDO.length>25)UNDO.shift()}
+async function reload(){EMP=await all('empresas');HAL=await all('hallazgos');DOCS_DB=await all('archivos')}
+
+/* ══════════════════════════════════════════════════════════════
+   5) UTILIDADES UI
+   ══════════════════════════════════════════════════════════════ */
+let tt;function toast(m){$('#toast').textContent=m;$('#toast').classList.add('on');clearTimeout(tt);tt=setTimeout(()=>$('#toast').classList.remove('on'),2600)}
+const emp=()=>EMP.find(e=>e.id===S.empId)||null;
+const cl=c=>CLA.find(x=>x.codigo===c);
+const fdate=d=>d?new Date(d+'T12:00').toLocaleDateString(S.lang.startsWith('en')?'en-US':'es-MX',{dateStyle:'long'}):'';
+const help=(id,txt)=>`<div class="help" id="h-${id}">${txt} <button class="btn s no" data-say="${esc(txt)}">🔊</button></div>`;
+const secH=(t,hid,hz)=>`<div class="ch"><h2>${t}</h2><span class="row no"><button class="btn s" data-act="saySec">🔊</button>${hid?`<button class="btn s" data-act="help1" data-h="${hid}">?</button>`:''}</span></div>${hid?help(hid,hz):''}`;
+
+/* ═══ VOZ ═══ */
+const LANGS=[['es-MX','🇲🇽 Español (MX)'],['es-ES','🇪🇸 Español (ES)'],['en-US','🇺🇸 English (US)'],['en-GB','🇬🇧 English (UK)'],['de-DE','🇩🇪 Deutsch'],['fr-FR','🇫🇷 Français'],['pt-BR','🇧🇷 Português'],['zh-CN','🇨🇳 中文'],['ja-JP','🇯🇵 日本語'],['it-IT','🇮🇹 Italiano'],['ru-RU','🇷🇺 Русский'],['ar-SA','🇸🇦 العربية']];
+let VOICES=[];
+function loadVoices(){VOICES=speechSynthesis.getVoices();const pre=S.lang.slice(0,2);
+ const list=VOICES.map((v,i)=>({v,i})).sort((a,b)=>(b.v.lang.startsWith(pre))-(a.v.lang.startsWith(pre)));
+ $('#voice').innerHTML=list.map(({v,i})=>`<option value="${i}" ${S.voice===v.name?'selected':''}>${v.lang.startsWith(pre)?'★ ':' '}${v.name} · ${v.lang}</option>`).join('');
+ if(!S.voice){const f=list.find(x=>x.v.lang.startsWith(pre));if(f){S.voice=f.v.name;$('#voice').value=f.i}}}
+function speak(t){if(!t)return;speechSynthesis.cancel();const parts=[];let b='';
+ (t.match(/[^.;:!?]+[.;:!?]?\s*/g)||[t]).forEach(p=>{if((b+p).length>190&&b){parts.push(b);b=''}b+=p});if(b)parts.push(b);
+ const v=VOICES.find(x=>x.name===S.voice);
+ parts.forEach((p,i)=>{const u=new SpeechSynthesisUtterance(p);u.lang=S.lang;u.rate=+S.rate;u.volume=+S.vol;if(v)u.voice=v;
+  if(i===0)u.onstart=()=>$('#eq').classList.add('on');if(i===parts.length-1)u.onend=()=>$('#eq').classList.remove('on');speechSynthesis.speak(u)})}
+let REC=null;
+function dict(target,btn){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR)return toast('Este navegador no tiene dictado. Usa Chrome, Edge o Safari.');
+ if(REC){REC.stop();return}
+ REC=new SR();REC.lang=S.lang;REC.continuous=true;REC.interimResults=false;
+ REC.onresult=e=>{for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal){
+   const txt=e.results[i][0].transcript.trim();
+   if(target.isContentEditable){target.focus();document.execCommand('insertText',false,txt+' ')}
+   else{target.value+=(target.value&&!/\s$/.test(target.value)?' ':'')+txt;target.dispatchEvent(new Event('input',{bubbles:true}))}}};
+ REC.onend=()=>{REC=null;$$('.mic').forEach(b=>b.classList.remove('on'))};
+ REC.onerror=e=>{toast('No pude escuchar: '+e.error);REC=null};
+ btn&&btn.classList.add('on');REC.start();toast('🎙️ Escuchando… toca de nuevo para parar')}
+const load=(u,ok)=>ok()?Promise.resolve():new Promise((a,b)=>{const s=document.createElement('script');s.src=u;s.onload=a;s.onerror=b;document.head.append(s)});
+
+/* ══════════════════════════════════════════════════════════════
+   6) VISTAS
+   ══════════════════════════════════════════════════════════════ */
+const TABS=[['inicio','🏠 Inicio'],['empresas','🏢 Empresas'],['normas','📚 Normas'],['auditoria','🔍 Auditoría'],['documento','📄 Documento'],['asistente','🤖 Asistente'],['monitor','📡 Monitor'],['perfil','👤 Perfil'],['ajustes','⚙️ Ajustes']];
+const prog=eid=>{const need=CLA.filter(c=>c.regs.length);const n=need.reduce((s,c)=>s+c.regs.length,0);
+ const k=DOCS_DB.filter(d=>d.emp===eid).length;return{n,k,p:n?Math.min(100,Math.round(k/n*100)):0}};
+const V={};
+
+V.inicio=()=>{const e=emp(),p=e?prog(e.id):{n:0,k:0,p:0};
+ const abiertos=HAL.filter(h=>h.estado!=='cerrado');
+ return `<div class="card">${secH('Bienvenido, '+esc(S.perfil.n||'consultor'),'ini','Esta es tu pantalla principal. Arriba a la derecha está el menú, el botón de deshacer, el signo de interrogación que activa las explicaciones y la paleta de temas. La barra gris controla la voz: idioma, voz, velocidad y volumen. Todo lo que ves se guarda solo en este dispositivo.')}
+ <div class="g3">
+  <div class="stat"><b>${EMP.length}</b><span class="muted">Empresas</span></div>
+  <div class="stat"><b>${HAL.length}</b><span class="muted">Hallazgos</span></div>
+  <div class="stat"><b>${abiertos.length}</b><span class="muted">Sin cerrar</span></div>
+  <div class="stat"><b>${p.p}%</b><span class="muted">Avance documental</span></div>
+ </div>
+ <p class="muted" style="margin-top:12px">Empresa activa: <b>${e?esc(e.nom):'ninguna · elige una en Empresas'}</b> · Norma activa: <b>${S.norma}</b></p>
+ <div class="row" style="margin-top:12px">
+  <button class="btn p" data-go="auditoria">🔍 Nueva auditoría</button>
+  <button class="btn" data-go="documento">📄 Generar documento</button>
+  <button class="btn a" data-act="visita">🎙️ Modo visita (dictar hallazgo)</button>
+ </div></div>
+ <div class="card">${secH('Cómo se usa en 4 pasos','ini2','Paso uno: registra la empresa con sus datos. Paso dos: elige la norma y revisa la lista de documentos que pide cada cláusula. Paso tres: durante el recorrido dicta los hallazgos, se guardan con fecha, hora y ubicación. Paso cuatro: genera el documento profesional y expórtalo en PDF para el cliente o en formato editable para ti.')}
+ <ol style="padding-left:20px;font-size:14.5px"><li>Registra la empresa y sus datos.</li><li>Elige norma y revisa qué documentos pide.</li><li>Dicta hallazgos durante el recorrido.</li><li>Genera y exporta el informe.</li></ol></div>
+ ${abiertos.length?`<div class="card">${secH('Hallazgos abiertos','ini3','Estos son los hallazgos que aún no se cierran. Puedes escucharlos uno por uno o abrir la auditoría para editarlos.')}
+ ${abiertos.slice(0,8).map(h=>`<div class="alert ${h.sev==='critica'?'c':h.sev==='mayor'?'w':''}"><b>${esc(h.cl||'—')} · ${esc(h.sev)}</b><br>${esc(h.txt).slice(0,220)}<br><span class="muted">${new Date(h.ts).toLocaleString()}</span> <button class="btn s no" data-say="${esc(h.cl+'. '+h.txt)}">🔊</button></div>`).join('')}</div>`:''}`};
+
+V.empresas=()=>{const e=emp();
+ return `<div class="card">${secH('Empresas','emp','Aquí guardas una sola vez los datos de cada cliente: nombre, gerente, dirección, teléfonos, correo, RFC, giro y productos. Al generar cualquier documento estos datos se llenan solos. Usa el botón Agregar empresa tantas veces como necesites.')}
+ <div class="row"><button class="btn p" data-act="empNew">+ Agregar empresa</button>
+ <select class="in" style="max-width:340px" data-f="empId"><option value="">— Empresa activa —</option>${EMP.map(x=>`<option value="${x.id}" ${x.id===S.empId?'selected':''}>${esc(x.nom||'Sin nombre')}</option>`).join('')}</select></div></div>
+ ${e?`<div class="card">${secH('Datos de '+esc(e.nom||'la empresa'),'emp2','Estos datos aparecen automáticamente en la portada y en el cuerpo de todos los documentos. Puedes dictarlos con el micrófono en lugar de escribirlos.')}
+ <div class="g2">
+  ${[['nom','Nombre / Razón social'],['ger','Gerente o responsable'],['dir','Dirección'],['tel','Teléfono'],['mail','Correo'],['rfc','RFC / ID fiscal'],['giro','Giro (lácteos, cárnicos, bebidas…)'],['prod','Productos que elabora'],['plant','No. de planta / turno'],['cert','Esquema de certificación']].map(([k,l])=>`<label class="f">${l}<span class="row"><input class="in" data-e="${k}" value="${esc(e[k]||'')}"><button class="btn s mic no" data-dict-e="${k}">🎙️</button></span></label>`).join('')}
+ </div>
+ <div class="row" style="margin-top:12px"><button class="btn d" data-act="empDel">Eliminar empresa</button><span class="muted">Avance: ${prog(e.id).k} de ${prog(e.id).n} registros cargados</span></div></div>`:'<div class="card muted">Selecciona o crea una empresa para editar sus datos.</div>'}`};
+
+V.normas=()=>{const list=DOCS.filter(d=>S.norma==='TODAS'||d.norma===S.norma);
+ const e=emp();
+ return `<div class="card">${secH('Rack de conocimiento','nor','Este es el cerebro del sistema. Trae precargado el SQF edición 10 completo con los módulos 2 y 11 tal como vienen en tu documento, más ISO 22000, FSSC 22000, BRCGS, NOM-251, Codex HACCP, guías de FDA y un banco de frases profesionales. Enciende una norma con los botones y el asistente responderá solo con esa norma. Toca una cláusula para ver los documentos que exige y subir la evidencia.')}
+ <div class="row">${[['TODAS','Todas']].concat(NORMAS.map(n=>[n[0],n[0]])).map(([k,l])=>`<button class="chip ${S.norma===k?'on':''}" data-norma="${k}">${l}</button>`).join('')}</div>
+ <p class="muted" style="margin-top:8px">${list.length} fichas · Fuentes: documento de Óscar Ordóñez, DOF, Codex/FAO, FDA y guías públicas. Las normas ISO, SQF, FSSC y BRCGS son de pago: aquí se incluye su estructura y requisitos, no el texto oficial completo.</p>
+ <input class="in" id="qnor" placeholder="Filtrar cláusulas, registros o temas…" style="margin-top:10px"></div>
+ <div id="norList">${list.map(d=>ficha(d,e)).join('')}</div>`};
+
+function ficha(d,e){
+ const regs=d.regs||[];const eid=e?e.id:'';
+ const files=DOCS_DB.filter(f=>f.emp===eid&&f.cl===d.codigo);
+ return `<details class="cl" data-txt="${esc(nm(d.codigo+' '+d.titulo+' '+regs.join(' ')+' '+(d.txt||'')))}">
+ <summary><b>${esc(d.codigo)}</b><span>${esc(d.titulo)}<br><span class="muted">${d.norma}${regs.length?' · '+regs.length+' registros':''}</span></span><em class="muted">${regs.length&&e?files.length+'/'+regs.length:''}</em></summary>
+ <div class="body">
+ ${d.obs?`<p class="alert w">📌 ${esc(d.obs)}</p>`:''}
+ ${d.txt?`<p style="font-size:14px;white-space:pre-wrap">${esc(d.txt)}</p>`:''}
+ ${regs.length?`<p class="muted" style="margin:8px 0 4px"><b>Entradas o registros requeridos:</b></p>
+ ${regs.map((r,i)=>{const f=files.find(x=>x.reg===i);return `<div class="reg ${f?'ok':''}"><span>${f?'✓ ':'• '}${esc(r)}</span><span class="row no">
+  <button class="btn s" data-up="${d.codigo}|${i}">${f?'Reemplazar':'Subir'}</button>
+  ${f?`<button class="btn s" data-view="${f.id}">Ver</button>`:''}
+  <button class="btn s" data-say="${esc(r)}">🔊</button></span></div>`}).join('')}`:''}
+ <div class="row no" style="margin-top:10px">
+  <button class="btn s" data-say="${esc(d.codigo+'. '+d.titulo+'. '+(d.obs||'')+' '+(d.txt||'')+' Registros requeridos: '+regs.join('; '))}">🔊 Escuchar ficha</button>
+  ${d.codigo&&cl(d.codigo)?`<button class="btn s" data-mkdoc="${d.codigo}">📄 Generar documento de esta cláusula</button>`:''}
+  ${d.fuente?`<a class="btn s" href="${d.fuente}" target="_blank" rel="noopener">Fuente</a>`:''}
+ </div></div></details>`}
+
+V.auditoria=()=>{const e=emp();
+ return `<div class="card">${secH('Auditoría en curso','aud','Elige la empresa y la cláusula, dicta lo que observaste y clasifica la gravedad. Cada hallazgo se guarda con fecha, hora y ubicación GPS si el navegador lo permite. Puedes adjuntar una foto o escanear un documento con OCR para convertirlo en texto editable.')}
+ ${!e?'<p class="alert w">Primero elige una empresa en la pestaña Empresas.</p>':''}
+ <div class="g2">
+  <label class="f">Cláusula<select class="in" id="aCl">${CLA.filter(c=>S.norma==='TODAS'||c.norma===S.norma).map(c=>`<option value="${c.codigo}">${c.codigo} · ${esc(c.titulo)}</option>`).join('')}</select></label>
+  <label class="f">Gravedad<select class="in" id="aSev"><option value="cumple">Cumple</option><option value="menor">Menor</option><option value="mayor">Mayor</option><option value="critica">Crítica</option><option value="na">No aplica</option><option value="obs">Observación / mejora</option></select></label>
+ </div>
+ <label class="f" style="margin-top:10px">Hallazgo<textarea class="ta" id="aTxt" placeholder="Dicta o escribe lo que observaste…"></textarea></label>
+ <div class="row no" style="margin-top:8px">
+  <button class="btn mic" data-dict="#aTxt">🎙️ Dictar</button>
+  <button class="btn" data-act="ocr" data-target="#aTxt">📷 Escanear (OCR)</button>
+  <button class="btn" data-say-el="#aTxt">🔊 Escuchar</button>
+  <button class="btn" data-act="autoTxt">✨ Redactar base</button>
+ </div>
+ <label class="f" style="margin-top:10px">Recomendación / acción<textarea class="ta" id="aRec" style="min-height:80px"></textarea></label>
+ <div class="row no" style="margin-top:8px"><button class="btn mic" data-dict="#aRec">🎙️ Dictar</button><button class="btn" data-act="frase">💡 Banco de frases</button></div>
+ <div class="g2" style="margin-top:10px">
+  <label class="f">Responsable<input class="in" id="aResp"></label>
+  <label class="f">Fecha límite<input class="in" type="date" id="aLim"></label>
+ </div>
+ <div class="row" style="margin-top:12px"><button class="btn p" data-act="halAdd">➕ Guardar hallazgo</button>
+ <label class="btn no">📎 Foto<input type="file" accept="image/*" capture="environment" id="aFoto" hidden></label><span class="muted" id="aFotoN"></span></div></div>
+ <div class="card">${secH('Hallazgos registrados ('+HAL.length+')','aud2','Aquí están todos los hallazgos guardados. Puedes escucharlos, editarlos, cerrarlos o eliminarlos. Si borras algo por error usa el botón de deshacer de arriba.')}
+ ${HAL.length?HAL.slice().reverse().map(h=>`<div class="alert ${h.sev==='critica'?'c':h.sev==='mayor'?'w':''}">
+  <div class="row" style="justify-content:space-between"><b>${esc(h.cl)} · ${esc(h.sev.toUpperCase())} <span class="pill" style="background:${h.estado==='cerrado'?'var(--ok)':'var(--a)'}">${h.estado}</span></b>
+  <span class="row no"><button class="btn s" data-say="${esc(h.cl+'. '+h.sev+'. '+h.txt+'. Recomendación: '+(h.rec||''))}">🔊</button>
+  <button class="btn s" data-hal-close="${h.id}">${h.estado==='cerrado'?'Reabrir':'Cerrar'}</button>
+  <button class="btn s d" data-hal-del="${h.id}">✕</button></span></div>
+  <div contenteditable="true" data-hal-edit="${h.id}" style="outline:none;margin:6px 0">${esc(h.txt)}</div>
+  ${h.rec?`<p class="muted"><b>Acción:</b> ${esc(h.rec)}</p>`:''}
+  <p class="muted">${new Date(h.ts).toLocaleString()}${h.gps?' · 📍 '+h.gps:''}${h.resp?' · 👤 '+esc(h.resp):''}${h.lim?' · ⏳ '+fdate(h.lim):''}</p>
+  ${h.foto?`<img src="${h.foto}" style="max-width:190px;border-radius:8px;margin-top:6px">`:''}
+ </div>`).join(''):'<p class="muted">Aún no hay hallazgos.</p>'}</div>`};
+
+V.asistente=()=>`<div class="card">${secH('Asistente del Rack','asi','Pregunta con voz o por escrito. El sistema busca dentro del rack de conocimiento, no inventa: te muestra la cláusula, los registros que exige y la fuente. Si enciendes una norma arriba, la búsqueda se limita a esa norma. Puedes escuchar la respuesta mientras manejas.')}
+ <div class="row"><input class="in" id="q" placeholder="Ej.: ¿qué registros pide la cláusula 11.2.4? o plagas, alérgenos, agua…" style="flex:1;min-width:220px">
+ <button class="btn mic" data-dict="#q">🎙️</button><button class="btn p" data-act="ask">Buscar</button></div>
+ <p class="muted" style="margin-top:6px">Norma activa: <b>${S.norma}</b> · cámbiala en la pestaña Normas.</p>
+ <div class="row" style="margin-top:8px">${['11.2.4 plagas','2.8 alérgenos','HACCP PCC','agua potable','recall retiro','frases hallazgo menor','cultura de inocuidad'].map(x=>`<button class="chip" data-q="${x}">${x}</button>`).join('')}</div>
+ <div id="ans" style="margin-top:12px"></div>
+ <p class="muted" style="margin-top:10px">Las respuestas son una guía basada en las normas y en el documento base; no sustituyen el juicio de un auditor certificado ni el texto oficial vigente.</p></div>`;
+
+V.documento=()=>{const e=emp(),d=S.doc;
+ return `<div class="card">${secH('Generador de documentos','doc','Elige el tipo de documento y la cláusula. El sistema redacta el machote completo con los datos de la empresa, tu perfil y los hallazgos registrados. Los campos amarillos son los huecos: tócalos y dicta. Puedes editar todo el texto, resaltar en amarillo, subrayar, cambiar color y tamaño. Al final exportas dos archivos: uno editable para ti y el PDF profesional con candado para el cliente.')}
+ <div class="g3">
+  <label class="f">Tipo<select class="in" data-d="tipo">
+   ${[['aud','Informe de auditoría'],['con','Informe de consultoría / diagnóstico'],['poe','Procedimiento (POE)'],['cap','Programa de capacitación'],['mant','Programa de mantenimiento preventivo'],['plan','Plan de acciones correctivas'],['crisis','Informe de emergencia / crisis']].map(([k,l])=>`<option value="${k}" ${d.tipo===k?'selected':''}>${l}</option>`).join('')}</select></label>
+  <label class="f">Cláusula base<select class="in" data-d="cl"><option value="">— General —</option>${CLA.map(c=>`<option value="${c.codigo}" ${d.cl===c.codigo?'selected':''}>${c.codigo} · ${esc(c.titulo)}</option>`).join('')}</select></label>
+  <label class="f">Fecha<input class="in" type="date" data-d="fecha" value="${d.fecha}"></label>
+  <label class="f">Folio<input class="in" data-d="folio" value="${esc(d.folio)}" placeholder="Opcional"></label>
+ </div>
+ <div class="row" style="margin-top:10px"><label class="row"><input type="checkbox" data-d="showF" ${d.showF?'checked':''}> Mostrar fecha y hora</label>
+ <label class="row"><input type="checkbox" id="incHal" checked> Incluir hallazgos</label>
+ <button class="btn p" data-act="gen">✨ Generar / regenerar</button></div></div>
+ <div class="paper-wrap">
+  <div class="fmt no">
+   <button data-cmd="bold"><b>B</b></button><button data-cmd="italic"><i>I</i></button><button data-cmd="underline"><u>U</u></button>
+   <button data-cmd="hiliteColor" data-val="#fde047" style="background:#fde047;color:#111">H</button>
+   <button data-cmd="hiliteColor" data-val="transparent">⌫H</button>
+   <button data-cmd="foreColor" data-val="#dc2626" style="color:#ff9c9c">A</button>
+   <button data-cmd="foreColor" data-val="#1d4ed8" style="color:#9cc4ff">A</button>
+   <button data-cmd="foreColor" data-val="#111827">A</button>
+   <button data-cmd="fontSize" data-val="5">A+</button><button data-cmd="fontSize" data-val="2">A−</button>
+   <button data-cmd="fontSize" data-val="3">A</button>
+   <button data-cmd="justifyLeft">⬅</button><button data-cmd="justifyFull">≡</button>
+   <button data-cmd="insertUnorderedList">•</button><button data-cmd="removeFormat">✧</button>
+   <button class="mic" data-dict="#paper">🎙️</button><button data-act="ocr" data-target="#paper">📷</button>
+  </div>
+  <div class="row no" style="margin-bottom:8px">
+   <button class="btn s" data-say-el="#paper">🔊 Leer documento</button>
+   <button class="btn s" data-act="stop">⏹</button>
+   <button class="btn s a" data-act="expEdit">📥 Editable (.html)</button>
+   <button class="btn s a" data-act="expWord">📥 Word (.doc)</button>
+   <button class="btn s p" data-act="expPDF">🔒 PDF profesional</button>
+   <button class="btn s" data-act="expWeb">🌐 Web para el cliente</button>
+   <button class="btn s" data-act="share">📤 Compartir</button>
+  </div>
+  <div class="paper" id="paper" contenteditable="true">${d.html||'<p style="color:#888">Configura arriba y toca <b>✨ Generar</b>. El documento aparecerá aquí, listo para editar y dictar.</p>'}</div>
+ </div>
+ <div class="card" style="margin-top:14px">${secH('Percepciones del consultor (no salen en el documento)','not','Este cuadro es solo para ti. Aquí anotas impresiones, pendientes y recordatorios de la visita. No se incluye en el PDF ni en el archivo del cliente, pero sí se guarda en tu respaldo.')}
+ <textarea class="ta" data-d="notas" placeholder="Notas privadas…">${esc(d.notas)}</textarea>
+ <div class="row no" style="margin-top:8px"><button class="btn mic" data-dict="[data-d=notas]">🎙️ Dictar</button><button class="btn" data-say-el="[data-d=notas]">🔊</button></div></div>`};
+
+V.monitor=()=>`<div class="card">${secH('Monitor regulatorio','mon','Este es el radar del sistema. Consulta publicaciones del Diario Oficial de la Federación y alertas de retiro de producto de la FDA. Sirve para avisarte si cambió una norma que afecta tus machotes. Necesita internet; si falla la conexión el resto del sistema sigue funcionando igual. Cada consulta puede guardarse en la bitácora.')}
+ <div class="row"><button class="btn p" data-act="monFetch">🔄 Consultar fuentes</button><button class="btn" data-act="monCsv">📥 Bitácora CSV</button><button class="btn d" data-act="monClear">Limpiar bitácora</button></div>
+ <p class="muted" style="margin-top:6px">Palabras clave: NOM-251, NOM-051, COFEPRIS, inocuidad, alérgenos, HACCP, alimentos, etiquetado.</p>
+ <div id="monOut" style="margin-top:12px"></div></div>
+ <div class="card">${secH('Bitácora de cambios','mon2','Registro histórico de las alertas detectadas, con fecha y fuente. Es tu evidencia de que te mantienes informado sobre los cambios en la normatividad, tal como pide la cláusula 2.4.1.')}
+ <div id="monLog"></div></div>`;
+
+V.perfil=()=>{const p=S.perfil;
+ return `<div class="card">${secH('Mi perfil','per','Estos datos aparecen en la portada y en la firma de todos los documentos. Regístralos una sola vez. Puedes subir la imagen de tu firma para que se inserte automáticamente en el documento profesional.')}
+ <div class="g2">${[['n','Nombre completo'],['c','Cargo / título'],['tel','Teléfono'],['mail','Correo'],['reg','Registro / cédula / certificación']].map(([k,l])=>`<label class="f">${l}<span class="row"><input class="in" data-p="${k}" value="${esc(p[k]||'')}"><button class="btn s mic no" data-dict-p="${k}">🎙️</button></span></label>`).join('')}</div>
+ <div class="row" style="margin-top:10px"><label class="btn no">🖊️ Subir firma<input type="file" accept="image/*" id="firmaUp" hidden></label>${p.firma?`<img src="${p.firma}" style="max-height:60px;background:#fff;border:1px solid var(--bd);border-radius:6px;padding:4px"><button class="btn s d" data-act="firmaDel">Quitar firma</button>`:''}</div></div>
+ <div class="card">${secH('Equipo / colaboradores','equ','Si trabajas con otros consultores o con un asistente, agrégalos aquí. Sus nombres podrán aparecer en el documento como participantes de la auditoría.')}
+ <div class="row"><button class="btn p" data-act="eqAdd">+ Agregar colaborador</button></div>
+ ${S.equipo.map((m,i)=>`<div class="g2" style="margin-top:8px"><input class="in" data-eq="${i}|n" value="${esc(m.n||'')}" placeholder="Nombre"><span class="row"><input class="in" data-eq="${i}|c" value="${esc(m.c||'')}" placeholder="Rol"><button class="btn s d" data-eq-del="${i}">✕</button></span></div>`).join('')}</div>`};
+
+V.ajustes=()=>`<div class="card">${secH('Licencia','lic','Esta licencia es individual y está vinculada a este archivo. Aquí ves la clave, el titular y la fecha de vigencia. Cuando la licencia vence el sistema muestra una pantalla de contacto y deja de operar, sin borrar tus datos.')}
+ <table style="width:100%;font-size:14px"><tr><td><b>Titular</b></td><td>${esc(LICENCIA.cliente)}</td></tr>
+ <tr><td><b>Empresa</b></td><td>${esc(LICENCIA.empresa)}</td></tr>
+ <tr><td><b>Clave</b></td><td>${esc(LICENCIA.clave)}</td></tr>
+ <tr><td><b>Vigencia</b></td><td>${fdate(LICENCIA.activacion)} → ${fdate(LICENCIA.expiracion)}</td></tr>
+ <tr><td><b>Estado</b></td><td>${licOK()?'✅ Activa · '+diasRest()+' días restantes':'❌ Inactiva'}</td></tr></table></div>
+ <div class="card">${secH('Respaldos y seguridad','bak','Tus datos viven solo en este navegador. Exporta un respaldo cada semana y guárdalo donde tú decidas: correo, WhatsApp o USB. Al importar un respaldo se reemplazan los datos actuales. Nada se envía a ningún servidor.')}
+ <div class="row"><button class="btn p" data-act="expJson">📥 Exportar respaldo (.json)</button>
+ <button class="btn" data-act="impJson">📤 Importar respaldo</button>
+ <button class="btn" data-act="mailBak">✉️ Enviar por correo</button>
+ <button class="btn d" data-act="wipe">Borrar todo</button></div>
+ <p class="muted" style="margin-top:8px">Empresas: ${EMP.length} · Hallazgos: ${HAL.length} · Archivos: ${DOCS_DB.length}</p></div>
+ <div class="card">${secH('Acerca de','abt','SIGIA Pro es un prototipo funcional construido a partir del documento de diseño y de las ideas de Óscar Ordóñez. El rack de conocimiento incluye el SQF edición 10 completo en su estructura de cláusulas y registros, más ISO 22000, FSSC 22000, BRCGS, NOM-251, Codex y guías de FDA. Las normas de pago se citan por estructura y fuente oficial, no se reproduce su texto propietario.')}
+ <p class="muted">Desarrollado por <b>Stack Labs</b> · Juan Carlos Pérez Martínez. Datos 100% locales (IndexedDB). Funciona sin internet salvo el monitor regulatorio y el OCR la primera vez.</p></div>`;
+
+/* ══════════════════════════════════════════════════════════════
+   7) GENERADOR DE DOCUMENTOS
+   ══════════════════════════════════════════════════════════════ */
+function genDoc(){
+ const e=emp()||{nom:'[EMPRESA]',ger:'[GERENTE]',dir:'[DIRECCIÓN]',tel:'',mail:'',prod:'',rfc:''},p=S.perfil,d=S.doc;
+ const c=d.cl?cl(d.cl):null, en=S.lang.startsWith('en');
+ const hals=$('#incHal')&&$('#incHal').checked?HAL.filter(h=>!d.cl||h.cl===d.cl):[];
+ const T={aud:['Informe de auditoría','Audit report'],con:['Informe de consultoría / diagnóstico','Consulting / gap assessment report'],poe:['Procedimiento operativo estandarizado','Standard operating procedure'],cap:['Programa de capacitación','Training program'],mant:['Programa de mantenimiento preventivo','Preventive maintenance program'],plan:['Plan de acciones correctivas','Corrective action plan'],crisis:['Informe de emergencia / crisis','Emergency / crisis report']}[d.tipo];
+ const title=(en?T[1]:T[0])+(c?' · '+c.codigo:'');
+ const ph=t=>`<span class="ph" data-ph="1">[${t}]</span>`;
+ const row=(k,v)=>`<tr><td style="width:32%"><b>${k}</b></td><td>${esc(v||'—')}</td></tr>`;
+ const dt=d.showF?`${fdate(d.fecha)}${d.tipo==='crisis'?' · '+new Date().toLocaleTimeString():''}`:'';
+ let body='';
+ const head=`<div style="text-align:center;border-bottom:3px solid #064E3B;padding-bottom:10px;margin-bottom:14px">
+  <h1>${esc(title)}</h1>
+  <div style="font-size:14px">${esc(e.nom)}${d.folio?' · Folio '+esc(d.folio):''}${dt?' · '+dt:''}</div>
+  <div style="font-size:12.5px;color:#555">${en?'Reference':'Referencia'}: ${c?'SQF Ed.10 · '+c.codigo+' '+esc(c.titulo):'SQF Ed.10 · Módulos 2 y 11'}</div></div>`;
+ const datos=`<h2>${en?'1. General data':'1. Datos generales'}</h2><table>
+  ${row(en?'Company':'Empresa',e.nom)}${row(en?'Manager':'Responsable',e.ger)}${row(en?'Address':'Dirección',e.dir)}
+  ${row(en?'Phone':'Teléfono',e.tel)}${row(en?'Email':'Correo',e.mail)}${row('RFC / ID',e.rfc)}
+  ${row(en?'Products':'Productos',e.prod)}${row(en?'Prepared by':'Elaborado por',(p.n||'')+(p.c?', '+p.c:''))}
+  ${S.equipo.length?row(en?'Team':'Participantes',S.equipo.map(m=>m.n+(m.c?' ('+m.c+')':'')).join('; ')):''}</table>`;
+ if(d.tipo==='aud'||d.tipo==='con'){
+  const n={};hals.forEach(h=>n[h.sev]=(n[h.sev]||0)+1);
+  body=datos+`<h2>${en?'2. Objective and scope':'2. Objetivo y alcance'}</h2>
+  <p>${d.tipo==='aud'?(en?'Assess the degree of compliance of the food safety management system against the applicable code and identify nonconformities requiring corrective action.':'Evaluar el grado de cumplimiento del sistema de gestión de inocuidad frente al código aplicable e identificar no conformidades que requieran acción correctiva.'):(en?'Diagnose the current status of the food safety management system, identify gaps and recommend actions for implementation and maintenance.':'Diagnosticar el estado del sistema de gestión de inocuidad, identificar brechas y recomendar acciones para su implementación y mantenimiento.')}</p>
+  <p>${en?'Methodology: documentary review of the records required by each clause, personnel interviews and on-site verification.':'Metodología: revisión documental de los registros requeridos por cada cláusula, entrevistas al personal y verificación en planta.'} ${ph(en?'AREAS COVERED':'ÁREAS RECORRIDAS')}</p>
+  <h2>${en?'3. Executive summary':'3. Resumen ejecutivo'}</h2>
+  <p>${hals.length?(en?`${hals.length} clauses were evaluated: `:`Se evaluaron ${hals.length} cláusulas: `)+Object.entries(n).map(([k,v])=>v+' '+k).join(', ')+'.':(en?'No findings recorded yet.':'Aún no hay hallazgos registrados.')}</p>
+  <p>${ph(en?'OVERALL CONCLUSION OF THE VISIT':'CONCLUSIÓN GENERAL DE LA VISITA')}</p>
+  ${c?`<h2>${en?'4. Requirement':'4. Requisito'} · ${c.codigo}</h2><p><b>${esc(c.titulo)}.</b> ${c.obs?esc(c.obs):''}</p>
+   ${c.regs.length?`<p><i>${en?'Required records':'Registros requeridos'}:</i> ${esc(c.regs.join('; '))}.</p>`:''}`:''}
+  <h2>${c?'5':'4'}. ${en?'Findings':'Hallazgos'}</h2>
+  ${hals.length?hals.map((h,i)=>`<div style="border-bottom:1px solid #ddd;padding:8px 0">
+   <p><b>${i+1}. ${esc(h.cl||'')} · ${esc((h.sev||'').toUpperCase())}</b></p>
+   <p>${esc(h.txt)}</p>${h.rec?`<p><b>${en?'Recommendation':'Recomendación'}:</b> ${esc(h.rec)}</p>`:''}
+   <p style="font-size:12.5px;color:#555">${new Date(h.ts).toLocaleString()}${h.gps?' · 📍'+h.gps:''}${h.resp?' · '+esc(h.resp):''}${h.lim?' · '+fdate(h.lim):''}</p>
+   ${h.foto?`<img src="${h.foto}" style="max-width:320px">`:''}</div>`).join(''):'<p>'+ph(en?'DESCRIBE FINDINGS':'DICTA LOS HALLAZGOS')+'</p>'}
+  <h2>${c?'6':'5'}. ${en?'Corrective action plan':'Plan de acciones'}</h2>
+  <table><tr><th>${en?'Clause':'Cláusula'}</th><th>${en?'Action':'Acción'}</th><th>${en?'Owner':'Responsable'}</th><th>${en?'Due':'Fecha límite'}</th></tr>
+  ${hals.filter(h=>['menor','mayor','critica'].includes(h.sev)).map(h=>`<tr><td>${esc(h.cl)}</td><td>${esc(h.rec||h.txt)}</td><td>${esc(h.resp||'')}</td><td>${h.lim?fdate(h.lim):''}</td></tr>`).join('')||`<tr><td colspan="4">${en?'No open nonconformities.':'Sin no conformidades abiertas.'}</td></tr>`}</table>
+  <p style="font-size:12.5px;color:#555">${en?'Closure deadlines must be confirmed against the current edition of the code and the certification body.':'Los plazos de cierre deben confirmarse con la edición vigente del código y el organismo de certificación.'}</p>
+  <h2>${c?'7':'6'}. ${en?'Conclusion':'Conclusión'}</h2><p>${ph(en?'FINAL CONCLUSION AND NEXT STEPS':'CONCLUSIÓN FINAL Y SIGUIENTES PASOS')}</p>`;
+ } else if(d.tipo==='poe'){
+  body=datos+`<h2>2. Objetivo</h2><p>Establecer los lineamientos para ${c?esc(c.titulo.toLowerCase()):ph('OBJETO DEL PROCEDIMIENTO')} en ${esc(e.nom)}, asegurando el cumplimiento de ${c?'la cláusula '+c.codigo+' del código SQF edición 10':'la normativa aplicable'}.</p>
+  <h2>3. Alcance</h2><p>Aplica a ${ph('ÁREAS Y PROCESOS ALCANZADOS')} y a todo el personal involucrado.</p>
+  <h2>4. Responsabilidades</h2><table><tr><th>Puesto</th><th>Responsabilidad</th></tr>
+  <tr><td>${esc(e.ger||'Gerencia')}</td><td>Aprobar el procedimiento y proveer recursos.</td></tr>
+  <tr><td>${ph('PUESTO')}</td><td>${ph('RESPONSABILIDAD')}</td></tr></table>
+  <h2>5. Desarrollo</h2><p>${ph('DESCRIBE PASO A PASO LA ACTIVIDAD')}</p>
+  <h2>6. Registros y evidencia</h2>${c&&c.regs.length?'<ul>'+c.regs.map(r=>'<li>'+esc(r)+'</li>').join('')+'</ul>':'<p>'+ph('REGISTROS')+'</p>'}
+  <h2>7. Verificación</h2><p>${ph('CÓMO Y CON QUÉ FRECUENCIA SE VERIFICA')}</p>
+  <h2>8. Control de cambios</h2><table><tr><th>Versión</th><th>Fecha</th><th>Cambio</th><th>Autor</th></tr><tr><td>01</td><td>${fdate(d.fecha)}</td><td>Emisión inicial</td><td>${esc(p.n)}</td></tr></table>`;
+ } else if(d.tipo==='cap'){
+  body=datos+`<h2>2. Detección de necesidades</h2><p>Se identifican necesidades de capacitación en ${c?esc(c.titulo):ph('TEMA')} derivadas de ${ph('ORIGEN: HALLAZGOS, CAMBIOS, NUEVO PERSONAL')}.</p>
+  <h2>3. Objetivo de la capacitación</h2><p>Que el personal ${ph('QUÉ DEBE SABER HACER AL TERMINAR')}.</p>
+  <h2>4. Temario y duración (16 horas · 2 días)</h2>
+  <table><tr><th>Sesión</th><th>Tema</th><th>Horas</th><th>Evidencia</th></tr>
+  <tr><td>1</td><td>Marco normativo y por qué importa (${c?c.codigo:'SQF'})</td><td>2</td><td>Lista de asistencia</td></tr>
+  <tr><td>2</td><td>Peligros y riesgos asociados al proceso</td><td>2</td><td>Ejercicio escrito</td></tr>
+  <tr><td>3</td><td>Procedimiento y registros aplicables</td><td>4</td><td>Práctica de llenado</td></tr>
+  <tr><td>4</td><td>Práctica en planta supervisada</td><td>6</td><td>Checklist del instructor</td></tr>
+  <tr><td>5</td><td>Evaluación teórico-práctica y cierre</td><td>2</td><td>Examen y constancia</td></tr></table>
+  <h2>5. Evaluación de eficacia</h2><p>${ph('CÓMO SE MEDIRÁ LA EFICENCIA A LOS 30 DÍAS')}</p>
+  <h2>6. Registros</h2><ul><li>Lista de asistencia firmada</li><li>Examen y calificación mínima aprobatoria</li><li>Constancias de habilidades</li><li>Evidencia fotográfica</li></ul>`;
+ } else if(d.tipo==='mant'){
+  body=datos+`<h2>2. Objetivo</h2><p>Asegurar la disponibilidad y condición sanitaria de los equipos mediante mantenimiento preventivo planificado, conforme a la cláusula 11.2.1 del código SQF edición 10.</p>
+  <h2>3. Inventario de equipos</h2><table><tr><th>Equipo</th><th>Ubicación</th><th>Criticidad</th><th>Frecuencia</th></tr>
+  <tr><td>${ph('EQUIPO')}</td><td>${ph('ÁREA')}</td><td>Alta</td><td>Mensual</td></tr></table>
+  <h2>4. Programa anual</h2><table><tr><th>Actividad</th><th>E</th><th>F</th><th>M</th><th>A</th><th>M</th><th>J</th><th>J</th><th>A</th><th>S</th><th>O</th><th>N</th><th>D</th><th>Responsable</th></tr>
+  <tr><td>Lubricación con grado alimenticio</td>${'<td>·</td>'.repeat(12)}<td>${ph('RESP')}</td></tr>
+  <tr><td>Inspección de guardas y sellos</td>${'<td>·</td>'.repeat(12)}<td>${ph('RESP')}</td></tr>
+  <tr><td>Verificación de instrumentación</td>${'<td>·</td>'.repeat(12)}<td>${ph('RESP')}</td></tr></table>
+  <h2>5. Requisitos sanitarios</h2><ul><li>Lubricantes grado alimenticio con ficha técnica</li><li>Herramienta controlada y limpia</li><li>Liberación del área con limpieza posterior</li><li>Registro firmado y verificación de calidad</li></ul>
+  <h2>6. Indicadores</h2><p>Cumplimiento del programa, fallas recurrentes y tiempo medio entre fallas. ${ph('META')}</p>`;
+ } else if(d.tipo==='plan'){
+  body=datos+`<h2>2. Plan de acciones correctivas</h2>
+  <table><tr><th>#</th><th>Cláusula</th><th>Hallazgo</th><th>Causa raíz</th><th>Acción</th><th>Responsable</th><th>Fecha límite</th><th>Verificación</th></tr>
+  ${(hals.length?hals:[{cl:'',txt:'',sev:''}]).map((h,i)=>`<tr><td>${i+1}</td><td>${esc(h.cl||'')}</td><td>${esc(h.txt||'')}</td><td>${ph('CAUSA')}</td><td>${esc(h.rec||'')}</td><td>${esc(h.resp||'')}</td><td>${h.lim?fdate(h.lim):''}</td><td>${ph('EVIDENCIA')}</td></tr>`).join('')}</table>
+  <p style="font-size:12.5px;color:#555">Método de análisis de causa raíz: cinco porqués o Ishikawa. La verificación de eficacia se realiza en la siguiente visita.</p>`;
+ } else {
+  body=datos+`<h2>2. Descripción del evento</h2><p>${ph('QUÉ OCURRIÓ, CUÁNDO Y CÓMO SE DETECTÓ')}</p>
+  <h2>3. Producto e instalaciones afectadas</h2><p>${ph('LOTES, CANTIDADES, DESTINOS')}</p>
+  <h2>4. Evaluación de riesgo</h2><p>${ph('CLASIFICACIÓN PRELIMINAR: CLASE I / II / III')}</p>
+  <h2>5. Acciones inmediatas</h2><ul><li>Contención y bloqueo de producto</li><li>Notificación a clientes y autoridad cuando aplique</li><li>Preservación de evidencia y trazabilidad</li></ul>
+  <h2>6. Comunicación</h2><p>${ph('A QUIÉN SE NOTIFICÓ, HORA Y MEDIO')}</p>
+  <h2>7. Causa raíz y acciones para evitar recurrencia</h2><p>${ph('ANÁLISIS Y ACCIONES')}</p>`;
+ }
+ const firma=`<div class="sig"><div>${p.firma?`<img src="${p.firma}" style="max-height:56px"><br>`:''}<b>${esc(p.n||'')}</b><br>${esc(p.c||'')}${p.reg?'<br>'+esc(p.reg):''}</div>
+  <div><b>${esc(e.ger||'')}</b><br>${en?'Received / acknowledged':'Recibí / Vo. Bo.'}<br>${esc(e.nom)}</div></div>
+  <p style="font-size:11.5px;color:#666;margin-top:22px;border-top:1px solid #ddd;padding-top:8px">${esc(d.folio||'')} ${dt} · ${en?'Document generated with SIGIA Pro. Technical guidance based on the applicable code; it does not replace the judgment of a certified auditor.':'Documento generado con SIGIA Pro. Guía técnica basada en el código aplicable; no sustituye el juicio de un auditor certificado.'}</p>`;
+ S.doc.html=head+body+firma;save();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   8) EXPORTACIONES
+   ══════════════════════════════════════════════════════════════ */
+function dl(name,content,type){const b=new Blob([content],{type});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),4000)}
+const fname=ext=>`SIGIA_${(emp()?.nom||'documento').replace(/[^\w]+/g,'_')}_${S.doc.fecha}.${ext}`;
+const PAPER_CSS=`body{font-family:Calibri,Arial,sans-serif;font-size:11.5pt;line-height:1.6;color:#111;max-width:820px;margin:32px auto;padding:0 18px}
+h1{font-size:19pt;color:#064E3B;text-align:center}h2{font-size:13.5pt;color:#064E3B;border-bottom:2px solid #064E3B;margin:18px 0 6px;padding-bottom:3px}
+p{text-align:justify;margin:7px 0}table{border-collapse:collapse;width:100%;font-size:10.5pt}td,th{border:1px solid #999;padding:4px 7px;text-align:left;vertical-align:top}
+mark{background:#fde047}.ph{background:#FEF3C7;border:1px dashed #D97706;padding:1px 4px}.sig{display:flex;gap:40px;margin-top:50px}.sig>div{flex:1;text-align:center;border-top:2px solid #111;padding-top:6px}img{max-width:100%}`;
+function paperClean(edit){const c=$('#paper').cloneNode(true);
+ if(!edit){c.querySelectorAll('.ph').forEach(p=>{p.replaceWith(document.createTextNode(p.textContent.replace(/^\[|\]$/g,'')))});c.querySelectorAll('[contenteditable]').forEach(x=>x.removeAttribute('contenteditable'))}
+ return c.innerHTML}
+function expEdit(){dl(fname('html'),`<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Editable · ${esc(emp()?.nom||'SIGIA')}</title><style>${PAPER_CSS}</style></head><body contenteditable="true">${paperClean(true)}<hr><p style="font-size:9pt;color:#777">Archivo EDITABLE. Ábrelo en el navegador o en Word, modifícalo y vuelve a exportar. Los campos amarillos son huecos por llenar.</p></body></html>`,'text/html');toast('Editable descargado')}
+function expWord(){dl(fname('doc'),`<html><head><meta charset="utf-8"><style>${PAPER_CSS}</style></head><body>${paperClean(true)}</body></html>`,'application/msword');toast('Word descargado')}
+function expWeb(){
+ const html=`<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(emp()?.nom||'Informe')} · SIGIA</title><style>${PAPER_CSS}body{background:#f6f7f6}.sheet{background:#fff;padding:34px;border-radius:12px;box-shadow:0 10px 30px #0001}.tb{max-width:820px;margin:14px auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-family:system-ui}button,select,input{font:inherit;padding:7px 12px;border-radius:8px;border:1px solid #ccc;background:#fff;cursor:pointer}</style></head><body>
+ <div class="tb"><button onclick="rd()">🔊 Escuchar informe</button><button onclick="speechSynthesis.cancel()">⏹ Parar</button>
+ <label>Velocidad <input type="range" id="r" min=".5" max="2.5" step=".1" value="1" oninput="document.getElementById('rv').textContent=this.value+'x'"><b id="rv">1x</b></label>
+ <label>Volumen <input type="range" id="v" min="0" max="1" step=".1" value="1"></label>
+ <button onclick="print()">🖨️ PDF</button></div>
+ <div class="sheet" id="c">${paperClean(false)}</div>
+ <script>function rd(){speechSynthesis.cancel();var t=document.getElementById('c').innerText.match(/[^.;:!?]+[.;:!?]?\\s*/g)||[];var b='',g=[];t.forEach(function(p){if((b+p).length>190&&b){g.push(b);b=''}b+=p});if(b)g.push(b);g.forEach(function(s){var u=new SpeechSynthesisUtterance(s);u.lang='${S.lang}';u.rate=+document.getElementById('r').value;u.volume=+document.getElementById('v').value;speechSynthesis.speak(u)})}<\/script></body></html>`;
+ dl(fname('_cliente.html'),html,'text/html');toast('Web del cliente descargada (con bocina)')}
+function expPDF(){const w=window.open('','_blank');
+ w.document.write(`<html><head><meta charset="utf-8"><title>${fname('pdf')}</title><style>${PAPER_CSS}@page{margin:18mm}body{margin:0}</style></head><body>${paperClean(false)}</body></html>`);
+ w.document.close();setTimeout(()=>{w.focus();w.print()},600);toast('Elige "Guardar como PDF"')}
+
+/* ══════════════════════════════════════════════════════════════
+   9) OCR / ARCHIVOS / MONITOR / RESPALDOS
+   ══════════════════════════════════════════════════════════════ */
+const TESS='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+const MAM='https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js';
+const XLS='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+async function ocr(file,target){toast('Leyendo imagen…');
+ try{await load(TESS,()=>window.Tesseract);const{data:{text}}=await Tesseract.recognize(file,S.lang.startsWith('en')?'eng':'spa');
+  const t=(text||'').replace(/\s+\n/g,'\n').trim();
+  if(!t)return toast('No se detectó texto legible');
+  const el=$(target);if(el.isContentEditable){el.focus();document.execCommand('insertText',false,t)}else{el.value+=(el.value?'\n\n':'')+t;el.dispatchEvent(new Event('input',{bubbles:true}))}
+  toast('Texto extraído: '+t.length+' caracteres')}catch(e){toast('OCR no disponible (¿sin internet?)')}}
+let UPTGT=null;
+async function saveFile(file,cl,reg){const id=uid();await put('archivos',{id,emp:S.empId,cl,reg,name:file.name,type:file.type,blob:file,ts:Date.now()});await reload();toast('Archivo guardado en este dispositivo');render()}
+async function viewFile(id){const f=await get('archivos',id);if(!f)return;CUR=id;CURURL=URL.createObjectURL(f.blob);
+ $('#dlgT').textContent=f.name;$('#dlgD').href=CURURL;$('#dlgD').download=f.name;const b=$('#dlgB');b.innerHTML='<p>Abriendo…</p>';$('#dlg').showModal();
+ const n=f.name.toLowerCase();
+ try{if(f.type==='application/pdf')b.innerHTML=`<iframe src="${CURURL}"></iframe>`;
+ else if(f.type.startsWith('image/'))b.innerHTML=`<img src="${CURURL}">`;
+ else if(n.endsWith('.docx')){await load(MAM,()=>window.mammoth);b.innerHTML='<div style="background:#fff;color:#111;padding:20px;max-width:800px">'+(await mammoth.convertToHtml({arrayBuffer:await f.blob.arrayBuffer()})).value+'</div>'}
+ else if(/\.xlsx?$/.test(n)){await load(XLS,()=>window.XLSX);const w=XLSX.read(await f.blob.arrayBuffer());b.innerHTML='<div style="background:#fff;color:#111;padding:14px;width:100%">'+w.SheetNames.map(s=>'<h3>'+esc(s)+'</h3>'+XLSX.utils.sheet_to_html(w.Sheets[s])).join('')+'</div>'}
+ else b.innerHTML='<p>Este formato no se puede mostrar aquí. Usa Descargar.</p>'}catch{b.innerHTML='<p>No pude abrirlo. Usa Descargar.</p>'}}
+const MONKW=['nom-251','nom-051','cofepris','inocuidad','alergeno','alérgeno','haccp','alimento','etiquetado','sanitaria'];
+let MONLOG=JSON.parse(localStorage.getItem('sigia_mon')||'[]');
+async function monFetch(){const out=$('#monOut');out.innerHTML='<p class="muted">Consultando fuentes…</p>';const res=[];
+ try{const r=await fetch('https://api.fda.gov/food/enforcement.json?limit=12');const j=await r.json();
+  (j.results||[]).forEach(x=>res.push({src:'FDA',t:x.reason_for_recall||'Recall',d:(x.recalling_firm||'')+' · '+(x.product_description||'').slice(0,160),f:x.recall_initiation_date,sev:x.classification==='Class I'?'c':'w',u:'https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts'}))}catch{}
+ try{const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent('https://www.dof.gob.mx/rss.php'));const j=await r.json();
+  (j.items||[]).forEach(x=>{const s=nm(x.title+' '+(x.description||''));if(MONKW.some(k=>s.includes(nm(k))))res.push({src:'DOF',t:x.title,d:(x.description||'').replace(/<[^>]+>/g,'').slice(0,200),f:(x.pubDate||'').slice(0,10),sev:'w',u:x.link})})}catch{}
+ if(!res.length){out.innerHTML='<p class="alert w">Sin resultados o sin conexión. El DOF puede requerir abrirse manualmente: <a href="https://www.dof.gob.mx" target="_blank">dof.gob.mx</a>. El resto del sistema funciona offline.</p>';return}
+ out.innerHTML=res.map(x=>`<div class="alert ${x.sev}"><b>${x.src} · ${x.f||''}</b><br>${esc(x.t)}<br><span class="muted">${esc(x.d)}</span><br><a href="${x.u}" target="_blank" rel="noopener">Fuente oficial</a> <button class="btn s no" data-say="${esc(x.src+'. '+x.t)}">🔊</button></div>`).join('');
+ res.forEach(x=>MONLOG.unshift({ts:new Date().toISOString(),src:x.src,t:x.t,f:x.f}));MONLOG=MONLOG.slice(0,400);localStorage.setItem('sigia_mon',JSON.stringify(MONLOG));monLog()}
+function monLog(){const el=$('#monLog');if(!el)return;
+ el.innerHTML=MONLOG.length?`<table style="width:100%;font-size:13px"><tr><th>Consulta</th><th>Fuente</th><th>Publicación</th><th>Asunto</th></tr>${MONLOG.slice(0,40).map(x=>`<tr><td>${new Date(x.ts).toLocaleDateString()}</td><td>${x.src}</td><td>${x.f||''}</td><td>${esc(x.t).slice(0,140)}</td></tr>`).join('')}</table>`:'<p class="muted">Sin registros.</p>'}
+async function expJson(){const archivos=await all('archivos');
+ const meta=archivos.map(({blob,...m})=>m);
+ dl('SIGIA_respaldo_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({v:1,ts:Date.now(),prefs:S,EMP,HAL,meta,MONLOG},null,1),'application/json');
+ toast('Respaldo descargado (los archivos binarios se listan, no se incluyen)')}
+async function impJson(file){try{const j=JSON.parse(await file.text());if(!j.EMP)throw 0;
+ await snap();for(const e of j.EMP)await put('empresas',e);for(const h of j.HAL||[])await put('hallazgos',h);
+ if(j.prefs){S=Object.assign(S,j.prefs);save()}MONLOG=j.MONLOG||MONLOG;localStorage.setItem('sigia_mon',JSON.stringify(MONLOG));
+ await reload();applyPrefs();render();toast('Respaldo importado')}catch{toast('Archivo de respaldo inválido')}}
+
+/* ══════════════════════════════════════════════════════════════
+   10) LICENCIA / RENDER / EVENTOS
+   ══════════════════════════════════════════════════════════════ */
+const licOK=()=>LICENCIA.activa&&new Date()<=new Date(LICENCIA.expiracion+'T23:59');
+const diasRest=()=>Math.max(0,Math.ceil((new Date(LICENCIA.expiracion)-new Date())/864e5));
+function lockScreen(msg){document.body.innerHTML=`<div class="lock"><div><div style="font-size:70px">🔒</div>
+ <h1 style="color:#EF4444;margin:10px 0">${msg}</h1><p style="color:#94A3B8;max-width:520px">Esta licencia es individual. Tus datos siguen guardados en este dispositivo y no se han borrado.</p>
+ <div style="margin-top:22px;background:#ffffff10;border:1px solid #ffffff20;border-radius:12px;padding:18px">
+ <b>Stack Labs</b><br>📧 ${LICENCIA.soporte.email}<br>📱 ${LICENCIA.soporte.tel}</div>
+ <p style="margin-top:18px;font-size:12px;color:#64748B">Clave ${LICENCIA.clave} · ${LICENCIA.cliente}</p></div></div>`}
+
+const SKINS=[['','🌲 Inocuidad'],['navy','🏢 Corporativo'],['dark','🌙 Oscuro'],['gold','💎 Oro y negro'],['burgundy','🍷 Borgoña'],['slate','🪨 Pizarra'],['sage','🌿 Salvia'],['petrol','🛢️ Petróleo'],['mono','⚪ Monocromo'],['queen','👑 Reina'],['cyber','🚀 Cyber'],['forest','🌳 Bosque']];
+function applyPrefs(){document.documentElement.setAttribute('data-skin',S.skin);document.body.classList.toggle('help-on',!!S.help);
+ $('#showDT').checked=!!S.showDT;$('#dt').style.display=S.showDT?'':'none';
+ $('#lang').innerHTML=LANGS.map(([k,l])=>`<option value="${k}" ${S.lang===k?'selected':''}>${l}</option>`).join('');
+ $('#rate').value=S.rate;$('#rateV').textContent=S.rate+'x';$('#vol').value=S.vol;$('#volV').textContent=Math.round(S.vol*100)+'%';
+ $('#skinList').innerHTML=SKINS.map(([k,l])=>`<button class="chip ${S.skin===k?'on':''}" data-skin="${k}">${l}</button>`).join('');loadVoices()}
+function render(){
+ $('#tabs').innerHTML=TABS.map(([k,l])=>`<div class="tab ${S.view===k?'on':''}" data-go="${k}">${l}</div>`).join('');
+ $$('.mi').forEach(m=>m.classList.toggle('on',m.dataset.go===S.view));
+ $('#main').innerHTML=(V[S.view]||V.inicio)();
+ if(S.view==='monitor')monLog();
+ const q=$('#qnor');if(q)q.oninput=()=>{const v=nm(q.value);$$('#norList details').forEach(d=>d.hidden=!d.dataset.txt.includes(v))};
+ const qi=$('#q');if(qi)qi.onkeydown=e=>{if(e.key==='Enter')ask()};
+}
+function go(v){S.view=v;save();$('#menu').classList.remove('on');render();scrollTo({top:0,behavior:'smooth'})}
+function ask(){const q=$('#q').value.trim();if(!q)return;const r=rag(q,S.norma);
+ $('#ans').innerHTML=r.length?r.map(({d,s})=>`<div class="card" style="margin-bottom:9px"><b>${esc(d.norma)} · ${esc(d.codigo)} ${esc(d.titulo)}</b>
+ ${d.regs&&d.regs.length?`<p style="font-size:14px"><b>Registros:</b> ${esc(d.regs.join('; '))}</p>`:''}
+ ${d.obs?`<p class="alert w">${esc(d.obs)}</p>`:''}
+ ${d.txt?`<p style="font-size:14px">${esc(d.txt).slice(0,900)}${d.txt.length>900?'…':''}</p>`:''}
+ <div class="row no"><button class="btn s" data-say="${esc(d.codigo+'. '+d.titulo+'. '+(d.regs||[]).join('; ')+'. '+(d.txt||d.obs||''))}">🔊 Escuchar</button>
+ ${d.fuente?`<a class="btn s" href="${d.fuente}" target="_blank" rel="noopener">Fuente</a>`:''}
+ ${cl(d.codigo)?`<button class="btn s" data-mkdoc="${d.codigo}">📄 Documento</button>`:''}</div></div>`).join('')
+ :'<p class="alert w">No encontré eso en el rack. Prueba con un número de cláusula (11.2.4) o palabras como plagas, alérgenos, agua, calibración, recall.</p>';
+ const first=r[0];if(first)speak(first.d.codigo+'. '+first.d.titulo+'. '+((first.d.regs||[]).join('; ')))}
+
+document.addEventListener('click',async e=>{
+ const b=e.target.closest('[data-act],[data-go],[data-skin],[data-norma],[data-say],[data-say-el],[data-dict],[data-dict-e],[data-dict-p],[data-up],[data-view],[data-mkdoc],[data-cmd],[data-q],[data-hal-del],[data-hal-close],[data-eq-del]');
+ if(!b){if(!e.target.closest('#menu')&&!e.target.closest('[data-act=menu]'))$('#menu').classList.remove('on');return}
+ const d=b.dataset;
+ if(d.go)return go(d.go);
+ if(d.skin!==undefined){S.skin=d.skin;save();applyPrefs();return}
+ if(d.norma){S.norma=d.norma;save();render();return}
+ if(d.say)return speak(d.say);
+ if(d.sayEl){const el=$(d.sayEl);return speak(el.isContentEditable?el.innerText:el.value)}
+ if(d.dict)return dict($(d.dict),b);
+ if(d.dictE){const i=document.querySelector(`[data-e="${d.dictE}"]`);return dict(i,b)}
+ if(d.dictP){const i=document.querySelector(`[data-p="${d.dictP}"]`);return dict(i,b)}
+ if(d.q){$('#q').value=d.q;return ask()}
+ if(d.cmd){document.execCommand(d.cmd,false,d.val||null);$('#paper').focus();S.doc.html=$('#paper').innerHTML;save();return}
+ if(d.mkdoc){S.doc.cl=d.mkdoc;S.view='documento';save();genDoc();render();return toast('Documento generado')}
+ if(d.up){if(!S.empId)return toast('Elige primero una empresa');UPTGT=d.up;$('#fileUp').click();return}
+ if(d.view)return viewFile(d.view);
+ if(d.halDel){await snap();await del('hallazgos',d.halDel);await reload();render();return toast('Hallazgo eliminado · puedes deshacer')}
+ if(d.halClose){const h=HAL.find(x=>x.id===d.halClose);h.estado=h.estado==='cerrado'?'abierto':'cerrado';await put('hallazgos',h);await reload();render();return}
+ if(d.eqDel!==undefined){S.equipo.splice(+d.eqDel,1);save();render();return}
+ const a=d.act;
+ if(a==='menu')$('#menu').classList.toggle('on');
+ else if(a==='skins'){$('#menu').classList.add('on');$('#skinList').scrollIntoView({block:'center'})}
+ else if(a==='help'){S.help=S.help?0:1;save();applyPrefs();toast(S.help?'Explicaciones activadas':'Explicaciones ocultas');if(S.help)speak('Modo cómo funciona activado. Cada sección muestra para qué sirve.')}
+ else if(a==='help1'){const h=$('#h-'+d.h);h.style.display=h.style.display==='block'?'none':'block';if(h.style.display==='block')speak(h.textContent)}
+ else if(a==='saySec'){const c=b.closest('.card');speak(c.innerText.replace(/🔊|\?/g,''))}
+ else if(a==='readAll')speak($('#main').innerText.slice(0,9000));
+ else if(a==='stop')speechSynthesis.cancel();
+ else if(a==='undo'){if(!UNDO.length)return toast('Nada que deshacer');const s=JSON.parse(UNDO.pop());
+  for(const x of await all('empresas'))await del('empresas',x.id);for(const x of await all('hallazgos'))await del('hallazgos',x.id);
+  for(const x of s.EMP)await put('empresas',x);for(const x of s.HAL)await put('hallazgos',x);await reload();render();toast('Acción deshecha')}
+ else if(a==='empNew'){if(EMP.length>=LICENCIA.maxEmpresas)return toast('Límite de empresas de esta licencia');await snap();
+  const id=uid();await put('empresas',{id,nom:'',ger:'',dir:'',tel:'',mail:'',rfc:'',giro:'',prod:'',plant:'',cert:''});S.empId=id;save();await reload();render();toast('Empresa creada · llena sus datos')}
+ else if(a==='empDel'){if(!confirm('¿Eliminar esta empresa y sus archivos?'))return;await snap();
+  for(const f of DOCS_DB.filter(x=>x.emp===S.empId))await del('archivos',f.id);
+  await del('empresas',S.empId);S.empId='';save();await reload();render()}
+ else if(a==='eqAdd'){S.equipo.push({n:'',c:''});save();render()}
+ else if(a==='firmaDel'){S.perfil.firma='';save();render()}
+ else if(a==='halAdd'){const txt=$('#aTxt').value.trim();if(!txt)return toast('Dicta o escribe el hallazgo');
+  await snap();const h={id:uid(),emp:S.empId,cl:$('#aCl').value,sev:$('#aSev').value,txt,rec:$('#aRec').value,resp:$('#aResp').value,lim:$('#aLim').value,estado:'abierto',ts:Date.now(),gps:GEO,foto:window.__foto||''};
+  await put('hallazgos',h);window.__foto=null;await reload();render();toast('Hallazgo guardado con fecha, hora y ubicación')}
+ else if(a==='autoTxt'){const c=cl($('#aCl').value);if(!c)return;
+  $('#aTxt').value=`Durante el recorrido se verificó la cláusula ${c.codigo} ${c.titulo}. `+(c.regs.length?`Registros requeridos: ${c.regs.join('; ')}. `:'')+`Evidencia observada: `;
+  $('#aRec').value=c.regs.length?`Elaborar, actualizar o formalizar: ${c.regs.slice(0,3).join('; ')}. Verificar eficacia en la siguiente visita.`:'';toast('Base redactada · completa con dictado')}
+ else if(a==='frase'){speak('Banco de frases');const f=EXTRA.find(x=>x.id==='frases');$('#ans')&&0;alert(f.txt)}
+ else if(a==='visita'){go('auditoria');setTimeout(()=>{const t=$('#aTxt');t.focus();dict(t,$('[data-dict="#aTxt"]'))},400)}
+ else if(a==='ocr'){UPTGT=d.target;$('#imgUp').click()}
+ else if(a==='gen'){genDoc();render();toast('Documento generado')}
+ else if(a==='expEdit')expEdit();else if(a==='expWord')expWord();else if(a==='expWeb')expWeb();else if(a==='expPDF')expPDF();
+ else if(a==='share'){const t=$('#paper')?$('#paper').innerText.slice(0,1500):'Informe SIGIA';
+  if(navigator.share)navigator.share({title:'Informe SIGIA',text:t}).catch(()=>{});else{navigator.clipboard?.writeText(t);toast('Texto copiado · pégalo en WhatsApp o correo')}}
+ else if(a==='monFetch')monFetch();
+ else if(a==='monCsv'){dl('bitacora_regulatoria.csv','Consulta,Fuente,Publicacion,Asunto\n'+MONLOG.map(x=>`"${new Date(x.ts).toLocaleString()}","${x.src}","${x.f||''}","${(x.t||'').replace(/"/g,'""')}"`).join('\n'),'text/csv')}
+ else if(a==='monClear'){if(confirm('¿Borrar bitácora?')){MONLOG=[];localStorage.setItem('sigia_mon','[]');monLog()}}
+ else if(a==='expJson')expJson();
+ else if(a==='impJson')$('#jsonUp').click();
+ else if(a==='mailBak'){await expJson();location.href=`mailto:?subject=${encodeURIComponent('Respaldo SIGIA '+new Date().toLocaleDateString())}&body=${encodeURIComponent('Adjunta el archivo JSON que se acaba de descargar. Bajo tu propia custodia.')}`}
+ else if(a==='wipe'){if(!confirm('Se borrarán empresas, hallazgos y archivos de este dispositivo. ¿Continuar?'))return;
+  for(const s of ['empresas','hallazgos','archivos'])for(const x of await all(s))await del(s,x.id);await reload();render();toast('Datos borrados')}
+ else if(a==='dlgX')$('#dlg').close();
+ else if(a==='dlgZoom'){const f=$('#dlgB iframe')||$('#dlgB img');if(f)f.style.transform=f.style.transform?'':'scale(1.6)';}
+ else if(a==='dlgDel'){if(CUR&&confirm('¿Eliminar archivo?')){await del('archivos',CUR);$('#dlg').close();await reload();render()}}
 });
-
-// ═══ FECHA Y HORA ═══
-function updateDateTime() {
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-  const timeStr = now.toLocaleTimeString('es-MX');
-  
-  document.getElementById('currentDate').textContent = dateStr;
-  document.getElementById('currentTime').textContent = timeStr;
-  
-  if (document.getElementById('reportDate')) {
-    document.getElementById('reportDate').textContent = dateStr;
-    document.getElementById('reportTime').textContent = timeStr;
-  }
-}
-
-function toggleTime() {
-  const show = document.getElementById('showTime').checked;
-  document.getElementById('datetimeDisplay').style.display = show ? 'flex' : 'none';
-}
-
-// ═══ GEOLOCALIZACIÓN ═══
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude.toFixed(4);
-        const lon = pos.coords.longitude.toFixed(4);
-        document.getElementById('gpsLocation').textContent = `📍 ${lat}, ${lon}`;
-      },
-      (err) => {
-        document.getElementById('gpsLocation').textContent = '📍 Ubicación no disponible';
-      }
-    );
-  }
-}
-
-// ═══ MENÚ HAMBURGUESA ═══
-function toggleMenu() {
-  const menu = document.getElementById('dropdownMenu');
-  const btn = document.getElementById('hamburgerBtn');
-  menu.classList.toggle('open');
-  btn.classList.toggle('active');
-}
-
-function toggleThemeMenu() {
-  const themes = ['', 'navy', 'dark'];
-  const current = document.documentElement.getAttribute('data-theme') || '';
-  const currentIndex = themes.indexOf(current);
-  const nextIndex = (currentIndex + 1) % themes.length;
-  const nextTheme = themes[nextIndex];
-  
-  if (nextTheme === '') {
-    document.documentElement.removeAttribute('data-theme');
-  } else {
-    document.documentElement.setAttribute('data-theme', nextTheme);
-  }
-}
-
-// ═══ TABS ═══
-function switchTab(tabName) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  
-  event?.target?.classList?.add('active');
-  document.getElementById('tab-' + tabName).classList.add('active');
-  
-  // Cerrar menú si está abierto
-  document.getElementById('dropdownMenu').classList.remove('open');
-  document.getElementById('hamburgerBtn').classList.remove('active');
-}
-
-// ═══ AYUDA (TOOLTIPS) ═══
-function toggleHelp(helpId) {
-  const tooltip = document.getElementById(helpId);
-  tooltip.classList.toggle('show');
-  
-  if (tooltip.classList.contains('show')) {
-    speak(tooltip.textContent);
-  }
-}
-
-// ═══ EMPRESAS ═══
-function loadCompanies() {
-  const select = document.getElementById('auditCompany');
-  select.innerHTML = '<option value="">-- Seleccionar Empresa --</option>';
-  
-  state.companies.forEach(c => {
-    const opt = document.createElement('option');
-    opt.value = c.id;
-    opt.textContent = c.name;
-    select.appendChild(opt);
-  });
-  
-  document.getElementById('statCompanies').textContent = state.companies.length;
-}
-
-function loadCompanyData() {
-  const id = parseInt(document.getElementById('auditCompany').value);
-  const company = state.companies.find(c => c.id === id);
-  
-  if (company) {
-    state.currentCompany = company;
-    document.getElementById('reportCompany').textContent = company.name;
-  }
-}
-
-// ═══ SELECTOR DE ISO ═══
-function selectISO(iso, btn) {
-  document.querySelectorAll('.iso-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  state.currentISO = iso;
-}
-
-// ═══ HALLAZGOS ═══
-function addFinding() {
-  const text = document.getElementById('findingText').value;
-  const severity = document.getElementById('severity').value;
-  
-  if (!text.trim()) {
-    alert('Por favor describe el hallazgo');
-    return;
-  }
-  
-  const finding = {
-    id: Date.now(),
-    text: text,
-    severity: severity,
-    timestamp: new Date().toISOString(),
-    location: document.getElementById('gpsLocation').textContent
-  };
-  
-  state.findings.push(finding);
-  state.history.push({ action: 'add', data: finding });
-  
-  document.getElementById('findingText').value = '';
-  renderFindings();
-  updateStats();
-}
-
-function renderFindings() {
-  const container = document.getElementById('findingsList');
-  
-  if (state.findings.length === 0) {
-    container.innerHTML = '<p class="text-sm" style="text-align: center; padding: 20px;">No hay hallazgos registrados aún</p>';
-    return;
-  }
-  
-  container.innerHTML = state.findings.map(f => `
-    <div class="finding-block ${f.severity}">
-      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
-        <div>
-          <strong>${f.severity.toUpperCase()}</strong>
-          <span class="text-sm" style="margin-left: 8px;">${new Date(f.timestamp).toLocaleString('es-MX')}</span>
-        </div>
-        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 12px;" onclick="deleteFinding(${f.id})">🗑️</button>
-      </div>
-      <p>${f.text}</p>
-      <p class="text-sm mt-2">${f.location}</p>
-    </div>
-  `).join('');
-}
-
-function deleteFinding(id) {
-  const finding = state.findings.find(f => f.id === id);
-  state.history.push({ action: 'delete', data: finding });
-  state.findings = state.findings.filter(f => f.id !== id);
-  renderFindings();
-  updateStats();
-}
-
-// ═══ DESHACER ═══
-function undoAction() {
-  if (state.history.length === 0) {
-    alert('No hay acciones para deshacer');
-    return;
-  }
-  
-  const lastAction = state.history.pop();
-  
-  if (lastAction.action === 'add') {
-    state.findings = state.findings.filter(f => f.id !== lastAction.data.id);
-  } else if (lastAction.action === 'delete') {
-    state.findings.push(lastAction.data);
-  }
-  
-  renderFindings();
-  updateStats();
-}
-
-// ═══ ESTADÍSTICAS ═══
-function updateStats() {
-  document.getElementById('statFindings').textContent = state.findings.length;
-  document.getElementById('statAudits').textContent = state.findings.length > 0 ? 1 : 0;
-}
-
-// ═══ AUDIO ═══
-function speak(text) {
-  if (!('speechSynthesis' in window)) return;
-  
-  speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'es-MX';
-  utterance.rate = state.audio.speed;
-  utterance.volume = state.audio.volume;
-  speechSynthesis.speak(utterance);
-}
-
-function readAll() {
-  const activeTab = document.querySelector('.tab-content.active');
-  const text = activeTab.textContent;
-  speak(text);
-}
-
-function stopAudio() {
-  speechSynthesis.cancel();
-}
-
-function updateSpeed(val) {
-  state.audio.speed = parseFloat(val);
-  document.getElementById('speedVal').textContent = val + 'x';
-}
-
-function updateVolume(val) {
-  state.audio.volume = parseFloat(val);
-  document.getElementById('volVal').textContent = Math.round(val * 100) + '%';
-}
-
-// ═══ DICTADO ═══
-function startDictation(targetId) {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  
-  if (!SpeechRecognition) {
-    alert('Tu navegador no soporta dictado de voz');
-    return;
-  }
-  
-  const recognition = new SpeechRecognition();
-  recognition.lang = 'es-MX';
-  recognition.continuous = true;
-  
-  const target = document.getElementById(targetId);
-  
-  recognition.onresult = (event) => {
-    const transcript = Array.from(event.results)
-      .map(result => result[0].transcript)
-      .join('');
-    target.value = transcript;
-  };
-  
-  recognition.start();
-  alert('Dictando... Habla ahora');
-  
-  setTimeout(() => recognition.stop(), 10000);
-}
-
-// ═══ ASISTENTE (SIMULADO) ═══
-function sendChat() {
-  const input = document.getElementById('chatInput');
-  const message = input.value.trim();
-  
-  if (!message) return;
-  
-  const container = document.getElementById('chatContainer');
-  
-  // Mensaje del usuario
-  container.innerHTML += `<div class="chat-message user">${message}</div>`;
-  
-  // Respuesta simulada
-  setTimeout(() => {
-    const responses = {
-      'sqf': 'Según SQF Edición 10, esta cláusula requiere evidencia documental de...',
-      'iso22000': 'De acuerdo con ISO 22000:2018, el sistema debe incluir...',
-      'default': 'Basado en la norma activa, te recomiendo verificar los siguientes puntos...'
-    };
-    
-    const response = responses[state.currentISO] || responses.default;
-    container.innerHTML += `<div class="chat-message assistant">${response}</div>`;
-    container.scrollTop = container.scrollHeight;
-  }, 500);
-  
-  input.value = '';
-}
-
-// ═══ EXPORTAR ═══
-function exportReport() {
-  alert('Función de exportación en desarrollo');
-}
-
-function exportPDF() {
-  alert('Función de exportación PDF en desarrollo');
-}
-
-function shareReport() {
-  if (navigator.share) {
-    navigator.share({
-      title: 'Informe de Auditoría',
-      text: 'Informe generado con SIGIA Pro',
-      url: window.location.href
-    });
-  } else {
-    alert('Compartir no disponible en este navegador');
-  }
-}
-
-// ═══ MODO VISITA ═══
-function startVoiceMode() {
-  alert('Modo Visita: Presiona el botón de micrófono para dictar hallazgos rápidamente');
-}
-
-// ═══ OCR (SIMULADO) ═══
-function startOCR() {
-  alert('Función OCR en desarrollo. Se integrará con Tesseract.js');
-}
-
-// ═══ ATAJOS DE TECLADO ═══
-document.addEventListener('keydown', (e) => {
-  if (e.ctrlKey && e.key === 'z') {
-    e.preventDefault();
-    undoAction();
-  }
+document.addEventListener('input',e=>{const t=e.target,d=t.dataset;
+ if(d.e){const x=emp();if(x){x[d.e]=t.value;put('empresas',x)}}
+ else if(d.p){S.perfil[d.p]=t.value;save()}
+ else if(d.eq){const[i,k]=d.eq.split('|');S.equipo[+i][k]=t.value;save()}
+ else if(d.d){S.doc[d.d]=t.type==='checkbox'?(t.checked?1:0):t.value;save()}
+ else if(d.halEdit){const h=HAL.find(x=>x.id===d.halEdit);if(h){h.txt=t.innerText;put('hallazgos',h)}}
+ if(t.id==='paper'){S.doc.html=t.innerHTML;save()}
 });
+document.addEventListener('change',async e=>{const i=e.target,f=i.files&&i.files[0];
+ if(i.id==='fileUp'&&f&&UPTGT){const[c,r]=UPTGT.split('|');await saveFile(f,c,+r)}
+ if(i.id==='imgUp'&&f){await ocr(f,UPTGT||'#aTxt')}
+ if(i.id==='jsonUp'&&f)await impJson(f);
+ if(i.id==='aFoto'&&f){const rd=new FileReader();rd.onload=()=>{window.__foto=rd.result;$('#aFotoN').textContent=f.name};rd.readAsDataURL(f)}
+ if(i.id==='firmaUp'&&f){const rd=new FileReader();rd.onload=()=>{S.perfil.firma=rd.result;save();render()};rd.readAsDataURL(f)}
+ if(i.dataset.f==='empId'){S.empId=i.value;save();render()}
+ i.value='';
+});
+document.addEventListener('click',e=>{const p=e.target.closest('.ph');if(!p)return;
+ const txt=prompt('Escribe o dicta el contenido de este campo:',p.textContent.replace(/^\[|\]$/g,''));
+ if(txt!==null){p.textContent=txt||p.textContent;p.classList.add('filled');S.doc.html=$('#paper').innerHTML;save()}});
+$('#lang').onchange=e=>{S.lang=e.target.value;S.voice='';save();loadVoices()};
+$('#voice').onchange=e=>{S.voice=VOICES[+e.target.value].name;save()};
+$('#rate').oninput=e=>{S.rate=e.target.value;$('#rateV').textContent=S.rate+'x';save()};
+$('#vol').oninput=e=>{S.vol=e.target.value;$('#volV').textContent=Math.round(S.vol*100)+'%';save()};
+$('#showDT').onchange=e=>{S.showDT=e.target.checked?1:0;save();$('#dt').style.display=S.showDT?'':'none'};
+$('#dlg').onclose=()=>{CURURL&&URL.revokeObjectURL(CURURL);$('#dlgB').innerHTML=''};
+addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();$('[data-act=undo]').click()}
+ if((e.ctrlKey||e.metaKey)&&e.key==='Enter'&&$('#q'))ask()});
+setInterval(()=>{const n=new Date();$('#dt').textContent=n.toLocaleDateString()+' '+n.toLocaleTimeString()},1000);
+
+/* ═══ ARRANQUE ═══ */
+(async function boot(){
+ if(!licOK())return lockScreen(LICENCIA.activa?'Licencia vencida':'Licencia desactivada');
+ applyPrefs();
+ if(diasRest()<=30)setTimeout(()=>toast('⚠️ Tu licencia vence en '+diasRest()+' días'),1500);
+ try{await reload()}catch(e){console.warn(e)}
+ if(!EMP.length){const a={id:uid(),nom:'Alimentos del Valle S.A. de C.V.',ger:'Lic. Roberto Gómez',dir:'Av. Industria 123, Parque Industrial',tel:'+52 55 0000 0000',mail:'contacto@ejemplo.com',rfc:'',giro:'Salsas y aderezos',prod:'Salsas, aderezos',plant:'',cert:'SQF Ed.10'};
+  const b={id:uid(),nom:'Procesadora del Norte',ger:'Ing. Laura Martínez',dir:'Carretera Nacional Km 45, Monterrey',tel:'',mail:'',rfc:'',giro:'Cárnicos',prod:'Cárnicos frescos y congelados',plant:'',cert:'SQF Ed.10'};
+  await put('empresas',a);await put('empresas',b);await reload();S.empId=a.id;save()}
+ navigator.geolocation?.getCurrentPosition(p=>{GEO=p.coords.latitude.toFixed(5)+', '+p.coords.longitude.toFixed(5);$('#gps').textContent='📍 '+GEO},()=>$('#gps').textContent='📍 no disponible');
+ speechSynthesis.onvoiceschanged=loadVoices;
+ render();
+})();
 </script>
-
 </body>
 </html>
+
+
+              <script>
+                              const LICENCIA = {
+  activa: true,                    // false = bloqueado al instante
+  clave: "GARCIA-2026-LEGAL",      // identificador único
+  cliente: "Lic. Roberto García",
+  empresa: "Bufete García & Asociados",
+  expiracion: "2026-12-31",        // ← al vencer, se bloquea solo
+  maxEmpresas: 20,
+  ...
+
+
+              </script>
+                        </body>
+                        </html>
+                    
